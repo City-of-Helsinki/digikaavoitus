@@ -166,9 +166,9 @@ CREATE TABLE asemakaavat."KaavaMaarays"(
 ALTER TABLE asemakaavat."KaavaMaarays" OWNER TO postgres;
 -- ddl-end --
 
--- object: asemakaavat."YleinenAlue" | type: TABLE --
--- DROP TABLE IF EXISTS asemakaavat."YleinenAlue" CASCADE;
-CREATE TABLE asemakaavat."YleinenAlue"(
+-- object: asemakaavat."YleinenAlue_MuuAlue" | type: TABLE --
+-- DROP TABLE IF EXISTS asemakaavat."YleinenAlue_MuuAlue" CASCADE;
+CREATE TABLE asemakaavat."YleinenAlue_MuuAlue"(
 	gid serial,
 	geom geometry(MULTISURFACEZ, 3878),
 	"YleinenAlue_uuid" uuid NOT NULL,
@@ -199,27 +199,27 @@ CREATE TABLE asemakaavat."YleinenAlue"(
 
 );
 -- ddl-end --
-COMMENT ON COLUMN asemakaavat."YleinenAlue"."Kaavamerkinta" IS 'Kaavamerkintä';
+COMMENT ON COLUMN asemakaavat."YleinenAlue_MuuAlue"."Kaavamerkinta" IS 'Kaavamerkintä';
 -- ddl-end --
-COMMENT ON COLUMN asemakaavat."YleinenAlue"."Km2" IS 'Kerrosneliömetrit';
+COMMENT ON COLUMN asemakaavat."YleinenAlue_MuuAlue"."Km2" IS 'Kerrosneliömetrit';
 -- ddl-end --
-COMMENT ON COLUMN asemakaavat."YleinenAlue"."LisaKm2" IS 'Lisä-kerrosneliömetrit';
+COMMENT ON COLUMN asemakaavat."YleinenAlue_MuuAlue"."LisaKm2" IS 'Lisä-kerrosneliömetrit';
 -- ddl-end --
-COMMENT ON COLUMN asemakaavat."YleinenAlue"."KaytettyKm2" IS 'Käytetyt kerrosneliömetrit';
+COMMENT ON COLUMN asemakaavat."YleinenAlue_MuuAlue"."KaytettyKm2" IS 'Käytetyt kerrosneliömetrit';
 -- ddl-end --
-COMMENT ON COLUMN asemakaavat."YleinenAlue"."LuontiPVM" IS 'Luonti päivämäärä';
+COMMENT ON COLUMN asemakaavat."YleinenAlue_MuuAlue"."LuontiPVM" IS 'Luonti päivämäärä';
 -- ddl-end --
-COMMENT ON COLUMN asemakaavat."YleinenAlue"."DatanLuoja" IS 'Datan luoja';
+COMMENT ON COLUMN asemakaavat."YleinenAlue_MuuAlue"."DatanLuoja" IS 'Datan luoja';
 -- ddl-end --
-COMMENT ON COLUMN asemakaavat."YleinenAlue"."MuokkausPVM" IS 'Muokkaus päivämäärä';
+COMMENT ON COLUMN asemakaavat."YleinenAlue_MuuAlue"."MuokkausPVM" IS 'Muokkaus päivämäärä';
 -- ddl-end --
-COMMENT ON COLUMN asemakaavat."YleinenAlue"."DatanMuokkaaja" IS 'Datan muokkaaja';
+COMMENT ON COLUMN asemakaavat."YleinenAlue_MuuAlue"."DatanMuokkaaja" IS 'Datan muokkaaja';
 -- ddl-end --
-COMMENT ON COLUMN asemakaavat."YleinenAlue"."HistoriaPVM" IS 'Historian päivämäärä (???)';
+COMMENT ON COLUMN asemakaavat."YleinenAlue_MuuAlue"."HistoriaPVM" IS 'Historian päivämäärä (???)';
 -- ddl-end --
-COMMENT ON COLUMN asemakaavat."YleinenAlue"."LisaKm2Kuvaus" IS 'Lisäkerrosneliömetrien kuvaus';
+COMMENT ON COLUMN asemakaavat."YleinenAlue_MuuAlue"."LisaKm2Kuvaus" IS 'Lisäkerrosneliömetrien kuvaus';
 -- ddl-end --
-ALTER TABLE asemakaavat."YleinenAlue" OWNER TO postgres;
+ALTER TABLE asemakaavat."YleinenAlue_MuuAlue" OWNER TO postgres;
 -- ddl-end --
 
 -- object: asemakaavat."KortteliAlue" | type: TABLE --
@@ -306,8 +306,8 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --
 
 -- object: "Asemakaava_fk" | type: CONSTRAINT --
--- ALTER TABLE asemakaavat."YleinenAlue" DROP CONSTRAINT IF EXISTS "Asemakaava_fk" CASCADE;
-ALTER TABLE asemakaavat."YleinenAlue" ADD CONSTRAINT "Asemakaava_fk" FOREIGN KEY ("Asemakaava__uuid_Asemakaava")
+-- ALTER TABLE asemakaavat."YleinenAlue_MuuAlue" DROP CONSTRAINT IF EXISTS "Asemakaava_fk" CASCADE;
+ALTER TABLE asemakaavat."YleinenAlue_MuuAlue" ADD CONSTRAINT "Asemakaava_fk" FOREIGN KEY ("Asemakaava__uuid_Asemakaava")
 REFERENCES asemakaavat."Asemakaava" ("Asemakaava__uuid") MATCH FULL
 ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --
@@ -578,15 +578,15 @@ ON DELETE SET NULL ON UPDATE CASCADE;
 -- ddl-end --
 
 -- object: "AK_tyyppi_fk" | type: CONSTRAINT --
--- ALTER TABLE asemakaavat."YleinenAlue" DROP CONSTRAINT IF EXISTS "AK_tyyppi_fk" CASCADE;
-ALTER TABLE asemakaavat."YleinenAlue" ADD CONSTRAINT "AK_tyyppi_fk" FOREIGN KEY ("AK_tunniste_AK_tyyppi")
+-- ALTER TABLE asemakaavat."YleinenAlue_MuuAlue" DROP CONSTRAINT IF EXISTS "AK_tyyppi_fk" CASCADE;
+ALTER TABLE asemakaavat."YleinenAlue_MuuAlue" ADD CONSTRAINT "AK_tyyppi_fk" FOREIGN KEY ("AK_tunniste_AK_tyyppi")
 REFERENCES koodistot."AK_tyyppi" ("AK_tunniste") MATCH FULL
 ON DELETE SET NULL ON UPDATE CASCADE;
 -- ddl-end --
 
--- object: "YleinenAlue_uq" | type: CONSTRAINT --
--- ALTER TABLE asemakaavat."YleinenAlue" DROP CONSTRAINT IF EXISTS "YleinenAlue_uq" CASCADE;
-ALTER TABLE asemakaavat."YleinenAlue" ADD CONSTRAINT "YleinenAlue_uq" UNIQUE ("AK_tunniste_AK_tyyppi");
+-- object: "YleinenAlue_MuuAlue_uq" | type: CONSTRAINT --
+-- ALTER TABLE asemakaavat."YleinenAlue_MuuAlue" DROP CONSTRAINT IF EXISTS "YleinenAlue_MuuAlue_uq" CASCADE;
+ALTER TABLE asemakaavat."YleinenAlue_MuuAlue" ADD CONSTRAINT "YleinenAlue_MuuAlue_uq" UNIQUE ("AK_tunniste_AK_tyyppi");
 -- ddl-end --
 
 -- object: koodistot.ra_tyyppi | type: TABLE --
@@ -707,15 +707,15 @@ ALTER TABLE asemakaavat."KortteliAlue" ADD CONSTRAINT "KortteliAlue_uq" UNIQUE (
 -- ddl-end --
 
 -- object: "AK_luokka_fk" | type: CONSTRAINT --
--- ALTER TABLE asemakaavat."YleinenAlue" DROP CONSTRAINT IF EXISTS "AK_luokka_fk" CASCADE;
-ALTER TABLE asemakaavat."YleinenAlue" ADD CONSTRAINT "AK_luokka_fk" FOREIGN KEY ("AK_tunniste_AK_luokka")
+-- ALTER TABLE asemakaavat."YleinenAlue_MuuAlue" DROP CONSTRAINT IF EXISTS "AK_luokka_fk" CASCADE;
+ALTER TABLE asemakaavat."YleinenAlue_MuuAlue" ADD CONSTRAINT "AK_luokka_fk" FOREIGN KEY ("AK_tunniste_AK_luokka")
 REFERENCES koodistot."AK_luokka" ("AK_tunniste") MATCH FULL
 ON DELETE SET NULL ON UPDATE CASCADE;
 -- ddl-end --
 
--- object: "YleinenAlue_uq1" | type: CONSTRAINT --
--- ALTER TABLE asemakaavat."YleinenAlue" DROP CONSTRAINT IF EXISTS "YleinenAlue_uq1" CASCADE;
-ALTER TABLE asemakaavat."YleinenAlue" ADD CONSTRAINT "YleinenAlue_uq1" UNIQUE ("AK_tunniste_AK_luokka");
+-- object: "YleinenAlue_MuuAlue_uq1" | type: CONSTRAINT --
+-- ALTER TABLE asemakaavat."YleinenAlue_MuuAlue" DROP CONSTRAINT IF EXISTS "YleinenAlue_MuuAlue_uq1" CASCADE;
+ALTER TABLE asemakaavat."YleinenAlue_MuuAlue" ADD CONSTRAINT "YleinenAlue_MuuAlue_uq1" UNIQUE ("AK_tunniste_AK_luokka");
 -- ddl-end --
 
 -- object: "AK_luokka_fk" | type: CONSTRAINT --
