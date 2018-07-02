@@ -1,0 +1,700 @@
+-- Database creation must be done outside an multicommand file.
+-- These commands were put in this file only for convenience.
+-- -- object: asemakaavat | type: DATABASE --
+-- -- DROP DATABASE IF EXISTS maankayttopaatokset;
+-- 
+-- -- Prepended SQL commands --
+-- CREATE EXTENSION IF NOT EXISTS POSTGIS;
+-- -- ddl-end --
+-- 
+-- CREATE DATABASE maankayttopaatokset
+-- 	ENCODING = 'UTF8'
+-- 	TABLESPACE = pg_default
+-- 	OWNER = postgres
+-- ;
+-- -- ddl-end --
+-- 
+
+-- object: asemakaavat | type: SCHEMA --
+-- DROP SCHEMA IF EXISTS asemakaavat CASCADE;
+CREATE SCHEMA asemakaavat;
+-- ddl-end --
+ALTER SCHEMA asemakaavat OWNER TO postgres;
+-- ddl-end --
+
+-- object: koodistot | type: SCHEMA --
+-- DROP SCHEMA IF EXISTS koodistot CASCADE;
+CREATE SCHEMA koodistot;
+-- ddl-end --
+ALTER SCHEMA koodistot OWNER TO postgres;
+-- ddl-end --
+COMMENT ON SCHEMA koodistot IS 'Erilaiset koodistot ja luokitukset';
+-- ddl-end --
+
+SET search_path TO pg_catalog,public,asemakaavat,koodistot;
+-- ddl-end --
+
+-- object: asemakaavat.asemakaava | type: TABLE --
+-- DROP TABLE IF EXISTS asemakaavat.asemakaava CASCADE;
+CREATE TABLE asemakaavat.asemakaava(
+	gid serial NOT NULL,
+	geom geometry(GEOMETRY, 3879),
+	asemakaava_uuid uuid NOT NULL,
+    kaavatunnus varchar(32), hankenumero varchar(50),
+    kieli1 varchar(15), kieli2 varchar(15), 
+    kaavanimi1 varchar(32),kaavanimi2 varchar(32), kaavanlaatija varchar(100),
+    hyvaksyja varchar(32), vireilletulopvm date,
+    hyvaksymispvm date, voimaantulopvm date,
+    kuntakoodi numeric(3), kaavanvaihe varchar(30),
+    kaavatyyppi varchar(32), kaavatyyppi2 varchar(50),
+    aluesijainti varchar(30), nahtavillealkupvm date,
+    nahtavillaviimpvm date, kaavamaarayskirjasto varchar(100),
+    kaavalinkki varchar(200), pintaala double precision, lisatietoja varchar(32),
+    yhtluontipvm date, yhtmuokkauspvm date,
+    yhtdatanomistaja varchar(25),
+	CONSTRAINT asemakaava_uuid_pk PRIMARY KEY (asemakaava_uuid)
+
+);
+
+COMMENT ON TABLE asemakaavat.asemakaava IS 'Geometria kuvaa asemakaavan rajaamaa aluetta';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.geom IS 'Asemakaavan rajaus';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.asemakaava_uuid IS 'Asemakaavan yksilöivä tunnus UUID';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.kaavatunnus IS 'Kaavan yksilöivä tunnus (kaavan numero)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.hankenumero IS 'Hankenumero';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.kieli1 IS 'Ensimmäinen kieli (Suomi)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.kieli2 IS 'Toinen kieli (Ruotsi)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.kaavanimi1 IS 'Kaavan nimi';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.kaavanimi2 IS 'Kaavan täydentävä nimi';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.kaavanlaatija IS 'Kaavan laatija (henkilö/organisaatio)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.hyvaksyja IS 'Kaavan hyväksyjä (viranomainen)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.vireilletulopvm IS 'Kaavan vireilletulopäivämäärä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.hyvaksymispvm IS 'Kaavan hyväksymispäivämäärä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.voimaantulopvm IS 'Kaavan voimaantulopäivämäärä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.kuntakoodi IS 'Kolminumeroinen kuntakoodi (Helsinki 091)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.kaavanvaihe IS 'Kaavan käsittelyvaihe';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.kaavatyyppi IS 'Kaavan tyyppi (esim. asemakaava, asemakaavan muutos)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.kaavatyyppi2 IS 'Kaavan tyyppi';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.aluesijainti IS 'Voimaantulosijainti, Voimassaolosijainti';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.nahtavillealkupvm IS 'Asemakaavaehdotuksen nähtävilläolonalkupäivämäärä (viimeisin nähtävilläoloaika)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.nahtavillaviimpvm IS 'Asemakaavaehdotuksen nähtävilläolonloppupäivämäärä (viimeisin nähtävilläoloaika)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.kaavamaarayskirjasto IS '31.3.2000 Ympäristöministeriön asetus MRL:nmukaisista kaavamerkinnöistä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.kaavalinkki IS 'Asemakaavan liitteet';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.pintaala IS 'Kaava-alueen pinta-ala';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.lisatietoja IS 'Kaavan hyväksymispäivämäärä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.yhtluontipvm IS 'Kohteen luontipäivämäärä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.yhtmuokkauspvm IS 'Kohteen viimeisin muokkauspäivämäärä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.asemakaava.yhtdatanomistaja IS 'Kaavatiedon omistaja (organisaatio)';
+-- ddl-end --
+ALTER TABLE asemakaavat.asemakaava OWNER TO postgres;
+-- ddl-end --
+
+-- object: asemakaavat.tontti | type: TABLE --
+-- DROP TABLE IF EXISTS asemakaavat.tontti CASCADE;
+CREATE TABLE asemakaavat.tontti(
+	gid serial NOT NULL,
+	geom geometry(GEOMETRY, 3879),
+	tontti_uuid uuid NOT NULL,
+    tyyppi varchar(32), kunta numeric(3),
+	sijaintialue numeric(3), ryhma numeric(4),
+	yksikko numeric(4), tehokkuusluku double precision,
+	km2 double precision, lisakm2 double precision, lisakm2kuvaus varchar(32), 
+	lisakm2rivita boolean DEFAULT FALSE, yhteensakm2 double precision, 
+	lisatietoja varchar(100),
+	kellari varchar(32), kerrosluku varchar(10), ullakko varchar, pintaala double precision,
+    yhtluontipvm date, yhtmuokkauspvm date,
+    yhtdatanomistaja varchar(25),
+	korttelialue_uuid_korttelialue uuid NOT NULL,
+	CONSTRAINT tontti_uuid_pk PRIMARY KEY (tontti_uuid)
+
+);
+
+COMMENT ON TABLE asemakaavat.tontti IS 'Geometria kuvaa tontin rajaamaa aluetta';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.tontti.geom IS 'Tontin rajaus';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.tontti.tontti_uuid IS 'Tontin yksilöivä tunnus UUID';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.tontti.tyyppi IS 'Ohjeellinen kaavatontti (Helsingissä)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.tontti.kunta IS 'Kolminumeroinen kuntakoodi (Helsinki 091)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.tontti.sijaintialue IS 'Kaupunginosan numero';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.tontti.ryhma IS 'Korttelin numero';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.tontti.yksikko IS 'Tontin numero';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.tontti.tehokkuusluku IS 'Alueen tehokkuusluku (kerrosalan suhde alueen pinta-alaan)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.tontti.km2 IS 'Rakennusoikeus kerrosneliömetreinä (k-m2)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.tontti.lisakm2 IS 'Lisärakennusoikeus kerrosneliömetreinä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.tontti.lisakm2kuvaus IS 'Kaavamerkintä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.tontti.lisakm2rivita IS 'Ei käytetä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.tontti.yhteensakm2 IS 'Rakennusoikeus yhteensä kerrosneliömetreinä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.tontti.lisatietoja IS 'Lisätietoja';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.tontti.kellari IS 'Kuinka suuren osan rakennuksen suurimman kerroksen alasta saa kellarikerroksessakäyttää kerrosalaan luettavaksi tilaksi';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.tontti.kerrosluku IS 'Rakennusten, rakennuksen tai sen osan suurin sallittu kerrosluku';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.tontti.ullakko IS 'Kuinka suuren osan rakennuksen suurimman kerroksen alasta ullakon tasollasaa käyttää kerrosalaan luettavaksi tilaksi';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.tontti.pintaala IS 'Tontin pinta-ala';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.tontti.yhtluontipvm IS 'Kohteen luontipäivämäärä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.tontti.yhtmuokkauspvm IS 'Kohteen viimeisin muokkauspäivämäärä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.tontti.yhtdatanomistaja IS 'Kaavatiedon omistaja (organisaatio)';
+-- ddl-end --
+ALTER TABLE asemakaavat.tontti OWNER TO postgres;
+-- ddl-end --
+
+-- object: asemakaavat.kaavamaarays | type: TABLE --
+-- DROP TABLE IF EXISTS asemakaavat.kaavamaarays CASCADE;
+CREATE TABLE asemakaavat.kaavamaarays(
+	gid serial NOT NULL,
+	geom geometry(GEOMETRY, 3879),
+	kaavamaarays_uuid uuid NOT NULL,
+	tyyppi varchar(100),
+	luokka varchar(100), teksti varchar(100), symbolityyppi varchar(35),
+	maanalainen boolean DEFAULT FALSE, leveys varchar(25), sitova boolean DEFAULT FALSE, pintaala double precision,
+	yhtluontipvm date, yhtmuokkauspvm date,
+    yhtdatanomistaja varchar(25),
+	angle double precision, x_scale double precision, y_scale double precision, 
+	asemakaava_uuid_asemakaava uuid NOT NULL,
+	rakennusala_uuid_rakennusala uuid,
+	ymparistoalue_uuid_ymparistoalue uuid,
+	CONSTRAINT kaavamaarays_uuid_pk PRIMARY KEY (kaavamaarays_uuid)
+
+);
+
+COMMENT ON TABLE asemakaavat.kaavamaarays IS 'Geometria kuvaa kaavamääräystä (piste, viiva tai alue)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.kaavamaarays.geom IS 'Kaavamääräyksen geometria';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.kaavamaarays.kaavamaarays_uuid IS 'Kaavamääräyksen yksilöivä tunnus UUID';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.kaavamaarays.tyyppi IS 'Kaavamääräyksen tyyppi';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.kaavamaarays.luokka IS 'Kaavamääräyksen kohdenimi';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.kaavamaarays.teksti IS 'Teksti-kenttä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.kaavamaarays.symbolityyppi IS 'Symbolityyppi';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.kaavamaarays.maanalainen IS 'Maanalainen, kyllä/ei';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.kaavamaarays.leveys IS 'Leveys';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.kaavamaarays.sitova IS 'Sitova, kyllä/ei';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.kaavamaarays.pintaala IS 'Kaavamääräyksen pinta-ala (aluekohde)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.kaavamaarays.yhtluontipvm IS 'Kohteen luontipäivämäärä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.kaavamaarays.yhtmuokkauspvm IS 'Kohteen viimeisin muokkauspäivämäärä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.kaavamaarays.yhtdatanomistaja IS 'Kaavatiedon omistaja (organisaatio)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.kaavamaarays.angle IS 'Piste-kohteen kierto';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.kaavamaarays.x_scale IS 'Piste-kohteen skaalaus x-koordinaatin (itä) suuntaan';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.kaavamaarays.y_scale IS 'Piste-kohteen skaalaus y-koordinaatin (pohjoinen) suuntaan';
+-- ddl-end --
+ALTER TABLE asemakaavat.kaavamaarays OWNER TO postgres;
+-- ddl-end --
+
+-- object: asemakaavat.yleinen_tai_muu_alue | type: TABLE --
+-- DROP TABLE IF EXISTS asemakaavat.yleinen_tai_muu_alue CASCADE;
+CREATE TABLE asemakaavat.yleinen_tai_muu_alue(
+	gid serial NOT NULL,
+	geom geometry(GEOMETRY, 3879),
+	yleinen_tai_muu_alue_uuid uuid NOT NULL,
+	kayttotarkoitus varchar(25), tyyppi varchar(100),
+	maanalainen boolean DEFAULT FALSE,
+	tehokkuusluku double precision,
+	kaavamerkinta varchar(10), km2 double precision,
+	lisakm2 double precision, lisakm2rivita boolean DEFAULT FALSE,
+	yhteensakm2 double precision,
+	kellari varchar(25), kerrosluku varchar(25),
+	ullakko varchar(25), korttelinnumero varchar(8),
+	knumerokartalle boolean DEFAULT FALSE,
+	pintaala double precision, lisatietoja varchar(32),
+	lisakm2kuvaus varchar(100), yhtluontipvm date, yhtmuokkauspvm date,
+    yhtdatanomistaja varchar(25),
+	asemakaava_uuid_asemakaava uuid NOT NULL,
+	CONSTRAINT yleinen_tai_muu_alue_uuid_pk PRIMARY KEY (yleinen_tai_muu_alue_uuid)
+
+);
+COMMENT ON TABLE asemakaavat.yleinen_tai_muu_alue IS 'Geometria kuvaa yleisen tai muun alueen rajaamaa aluetta';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.yleinen_tai_muu_alue.geom IS 'Yleisen tai muun alueen rajaus';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.yleinen_tai_muu_alue.yleinen_tai_muu_alue_uuid IS 'Yleisen tai muun alueen yksilöivä tunnus UUID';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.yleinen_tai_muu_alue.kayttotarkoitus IS 'Luokka (Alueen käyttötarkoitus esim. virkistysalue)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.yleinen_tai_muu_alue.tyyppi IS 'Kaavamerkintä (Alueen käyttötarkoitusmerkintä)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.yleinen_tai_muu_alue.maanalainen IS 'Maanalainen alue, kyllä/ei';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.yleinen_tai_muu_alue.tehokkuusluku IS 'Alueen tehokkuusluku (kerrosalan suhde alueen pinta-alaan)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.yleinen_tai_muu_alue.kaavamerkinta IS 'Tarkentava kaavamerkintä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.yleinen_tai_muu_alue.km2 IS 'Rakennusoikeus kerrosneliömetreinä (k-m2)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.yleinen_tai_muu_alue.lisakm2 IS 'Lisärakennusoikeus kerrosneliömetreinä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.yleinen_tai_muu_alue.lisakm2rivita IS 'Ei käytetä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.yleinen_tai_muu_alue.yhteensakm2 IS 'Rakennusoikeus yhteensä kerrosneliömetreinä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.yleinen_tai_muu_alue.kellari IS 'Kuinka suuren osan rakennuksen suurimman kerroksen alasta saa kellarikerroksessakäyttää kerrosalaan luettavaksi tilaksi';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.yleinen_tai_muu_alue.kerrosluku IS 'Rakennusten, rakennuksen tai sen osan suurin sallittu kerrosluku';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.yleinen_tai_muu_alue.ullakko IS 'Kuinka suuren osan rakennuksen suurimman kerroksen alasta ullakon tasollasaa käyttää kerrosalaan luettavaksi tilaksi';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.yleinen_tai_muu_alue.korttelinnumero IS 'Ei käytetä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.yleinen_tai_muu_alue.knumerokartalle IS 'Ei käytetä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.yleinen_tai_muu_alue.pintaala IS 'Yleisen tai muun alueen pinta-ala';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.yleinen_tai_muu_alue.lisatietoja IS 'Lisätietoja';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.yleinen_tai_muu_alue.lisakm2kuvaus IS 'Kaavamerkintä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.yleinen_tai_muu_alue.yhtluontipvm IS 'Kohteen luontipäivämäärä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.yleinen_tai_muu_alue.yhtmuokkauspvm IS 'Kohteen viimeisin muokkauspäivämäärä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.yleinen_tai_muu_alue.yhtdatanomistaja IS 'Kaavatiedon omistaja (organisaatio)';
+-- ddl-end --
+ALTER TABLE asemakaavat.yleinen_tai_muu_alue OWNER TO postgres;
+-- ddl-end --
+
+-- object: asemakaavat.korttelialue | type: TABLE --
+-- DROP TABLE IF EXISTS asemakaavat.korttelialue CASCADE;
+CREATE TABLE asemakaavat.korttelialue(
+	gid serial NOT NULL,
+	geom geometry(GEOMETRY, 3879),
+	korttelialue_uuid uuid NOT NULL,
+	kayttotarkoitus varchar(25), tyyppi varchar(100),
+	maanalainen boolean DEFAULT FALSE,
+	tehokkuusluku double precision,
+	kaavamerkinta varchar(10), km2 double precision,
+	lisakm2 double precision, lisakm2rivita boolean DEFAULT FALSE,
+	yhteensakm2 double precision,
+	kellari varchar(25), kerrosluku varchar(25),
+	ullakko varchar(25), korttelinnumero varchar(8),
+	knumerokartalle boolean DEFAULT FALSE,
+	pintaala double precision, lisatietoja varchar(32),
+	lisakm2kuvaus varchar(100), yhtluontipvm date, yhtmuokkauspvm date,
+    yhtdatanomistaja varchar(25),
+	asemakaava_uuid_asemakaava uuid NOT NULL,
+	CONSTRAINT korttelialue_uuid_pk PRIMARY KEY (korttelialue_uuid)
+
+);
+COMMENT ON TABLE asemakaavat.korttelialue IS 'Geometria kuvaa korttelin tai korttelinosan rajaamaa aluetta';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.korttelialue.geom IS 'Korttelin tai korttelinosan rajaus';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.korttelialue.korttelialue_uuid IS 'Korttelialueen yksilöivä tunnus UUID';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.korttelialue.kayttotarkoitus IS 'Luokka (Kortteli tai korttelin osa)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.korttelialue.tyyppi IS 'Kaavamerkintä (Alueen käyttötarkoitusmerkintä)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.korttelialue.maanalainen IS 'Maanalainen korttelialue, kyllä/ei';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.korttelialue.tehokkuusluku IS 'Alueen tehokkuusluku (kerrosalan suhde alueen pinta-alaan)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.korttelialue.kaavamerkinta IS 'Tarkentava kaavamerkintä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.korttelialue.km2 IS 'Rakennusoikeus kerrosneliömetreinä (k-m2)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.korttelialue.lisakm2 IS 'Lisärakennusoikeus kerrosneliömetreinä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.korttelialue.lisakm2rivita IS 'Ei käytetä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.korttelialue.yhteensakm2 IS 'Rakennusoikeus yhteensä kerrosneliömetreinä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.korttelialue.kellari IS 'Kuinka suuren osan rakennuksen suurimman kerroksen alasta saa kellarikerroksessakäyttää kerrosalaan luettavaksi tilaksi';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.korttelialue.kerrosluku IS 'Rakennusten, rakennuksen tai sen osan suurin sallittu kerrosluku';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.korttelialue.ullakko IS 'Kuinka suuren osan rakennuksen suurimman kerroksen alasta ullakon tasollasaa käyttää kerrosalaan luettavaksi tilaksi';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.korttelialue.korttelinnumero IS 'Korttelinnumero';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.korttelialue.knumerokartalle IS 'Korttelinumero kartalle, kyllä/ei';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.korttelialue.pintaala IS 'Korttelialueen pinta-ala';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.korttelialue.lisatietoja IS 'Lisätietoja';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.korttelialue.lisakm2kuvaus IS 'Kaavamerkintä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.korttelialue.yhtluontipvm IS 'Kohteen luontipäivämäärä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.korttelialue.yhtmuokkauspvm IS 'Kohteen viimeisin muokkauspäivämäärä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.korttelialue.yhtdatanomistaja IS 'Kaavatiedon omistaja (organisaatio)';
+-- ddl-end --
+ALTER TABLE asemakaavat.korttelialue OWNER TO postgres;
+-- ddl-end --
+
+-- object: korttelialue_fk | type: CONSTRAINT --
+-- ALTER TABLE asemakaavat.tontti DROP CONSTRAINT IF EXISTS kortteliAlue_fk CASCADE;
+ALTER TABLE asemakaavat.tontti ADD CONSTRAINT korttelialue_fk FOREIGN KEY (korttelialue_uuid_korttelialue)
+REFERENCES asemakaavat.korttelialue (korttelialue_uuid) MATCH FULL
+ON DELETE CASCADE ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: asemakaava_fk | type: CONSTRAINT --
+-- ALTER TABLE asemakaavat.kaavamaarays DROP CONSTRAINT IF EXISTS asemakaava_fk CASCADE;
+ALTER TABLE asemakaavat.kaavamaarays ADD CONSTRAINT asemakaava_fk FOREIGN KEY (asemakaava_uuid_asemakaava)
+REFERENCES asemakaavat.asemakaava (asemakaava_uuid) MATCH FULL
+ON DELETE CASCADE ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: asemakaava_fk | type: CONSTRAINT --
+-- ALTER TABLE asemakaavat.korttelialue DROP CONSTRAINT IF EXISTS asemakaava_fk CASCADE;
+ALTER TABLE asemakaavat.korttelialue ADD CONSTRAINT asemakaava_fk FOREIGN KEY (asemakaava_uuid_asemakaava)
+REFERENCES asemakaavat.asemakaava (asemakaava_uuid) MATCH FULL
+ON DELETE CASCADE ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: asemakaava_fk | type: CONSTRAINT --
+-- ALTER TABLE asemakaavat.yleinen_tai_muu_alue DROP CONSTRAINT IF EXISTS asemakaava_fk CASCADE;
+ALTER TABLE asemakaavat.yleinen_tai_muu_alue ADD CONSTRAINT asemakaava_fk FOREIGN KEY (asemakaava_uuid_asemakaava)
+REFERENCES asemakaavat.asemakaava (asemakaava_uuid) MATCH FULL
+ON DELETE CASCADE ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: asemakaavat.rakennusala | type: TABLE --
+-- DROP TABLE IF EXISTS asemakaavat.rakennusala CASCADE;
+CREATE TABLE asemakaavat.rakennusala(
+	gid serial NOT NULL,
+	geom geometry(GEOMETRY, 3879),
+	rakennusala_uuid uuid NOT NULL,
+	tyyppi varchar(35),
+	maanalainen boolean DEFAULT FALSE,
+    tehokkuusluku double precision,
+	kaavamerkinta varchar(20), km2 double precision,
+	lisakm2 double precision, lisakm2rivita boolean DEFAULT FALSE,
+	kellari varchar(25), kerrosluku varchar(25),
+	ullakko varchar(25),
+	varisavy varchar(25), sitova boolean DEFAULT FALSE,
+	pintaala double precision, lisatietoja varchar(32),
+	lisakm2kuvaus varchar(5), yhtluontipvm date, yhtmuokkauspvm date,
+    yhtdatanomistaja varchar(25),
+	asemakaava_uuid_asemakaava uuid NOT NULL,
+	ra_tyyppi_uuid_ra_tyyppi uuid NOT NULL,
+	CONSTRAINT rakennusala_uuid_pk PRIMARY KEY (rakennusala_uuid)
+
+);
+COMMENT ON TABLE asemakaavat.rakennusala IS 'Geometria kuvaa rakennusalan rajaamaa aluetta';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.rakennusala.geom IS 'Rakennusalan rajaus';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.rakennusala.rakennusala_uuid IS 'Rakennusalan yksilöivä tunnus UUID';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.rakennusala.tyyppi IS 'Rakennusalan tyyppi (esim. Rakennusala, Suojeltu rakennus…)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.rakennusala.maanalainen IS 'Maanalainen korttelialue, kyllä/ei';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.rakennusala.tehokkuusluku IS 'Alueen tehokkuusluku (kerrosalan suhde alueen pinta-alaan)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.rakennusala.kaavamerkinta IS 'Kaavamerkintä (rakennusalan käyttötarkoitusmerkintä)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.rakennusala.km2 IS 'Rakennusoikeus kerrosneliömetreinä (k-m2)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.rakennusala.lisakm2 IS 'Lisärakennusoikeus kerrosneliömetreinä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.rakennusala.lisakm2rivita IS 'Ei käytetä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.rakennusala.kellari IS 'Kuinka suuren osan rakennuksen suurimman kerroksen alasta saa kellarikerroksessakäyttää kerrosalaan luettavaksi tilaksi';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.rakennusala.kerrosluku IS 'Rakennusten, rakennuksen tai sen osan suurin sallittu kerrosluku';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.rakennusala.ullakko IS 'Kuinka suuren osan rakennuksen suurimman kerroksen alasta ullakon tasollasaa käyttää kerrosalaan luettavaksi tilaksi';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.rakennusala.varisavy IS '(haetaan värisävy käyttötarkoitusmerkinnän mukaisesti alasvetovalikosta, visuaalinen tieto)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.rakennusala.sitova IS 'Oletus Sitova (rakennusala)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.rakennusala.pintaala IS 'Rakennusalan pinta-ala';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.rakennusala.lisatietoja IS 'Lisätietoja';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.rakennusala.lisakm2kuvaus IS 'Kaavamerkintä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.rakennusala.yhtluontipvm IS 'Kohteen luontipäivämäärä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.rakennusala.yhtmuokkauspvm IS 'Kohteen viimeisin muokkauspäivämäärä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.rakennusala.yhtdatanomistaja IS 'Kaavatiedon omistaja (organisaatio)';
+-- ddl-end --
+ALTER TABLE asemakaavat.rakennusala OWNER TO postgres;
+-- ddl-end --
+
+-- object: Asemakaava_fk | type: CONSTRAINT --
+-- ALTER TABLE asemakaavat.rakennusala DROP CONSTRAINT IF EXISTS asemakaava_fk CASCADE;
+ALTER TABLE asemakaavat.rakennusala ADD CONSTRAINT asemakaava_fk FOREIGN KEY (asemakaava_uuid_asemakaava)
+REFERENCES asemakaavat.asemakaava (asemakaava_uuid) MATCH FULL
+ON DELETE CASCADE ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: asemakaavat.ymparistoalue | type: TABLE --
+-- DROP TABLE IF EXISTS asemakaavat.ymparistoalue CASCADE;
+CREATE TABLE asemakaavat.ymparistoalue(
+	gid serial NOT NULL,
+	geom geometry(GEOMETRY, 3879),
+	ymparistoalue_uuid uuid NOT NULL,
+	tyyppi varchar(30),
+	pintaala double precision,
+	yhtluontipvm date, yhtmuokkauspvm date,
+    yhtdatanomistaja varchar(25),
+	asemakaava_uuid_asemakaava uuid NOT NULL,
+	CONSTRAINT ymparistoalue_uuid_pk PRIMARY KEY (ymparistoalue_uuid)
+
+);
+COMMENT ON TABLE asemakaavat.ymparistoalue IS 'Geometria kuvaa ympäristöalueen rajaamaa aluetta';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.ymparistoalue.geom IS 'Ympäristöalueen rajaus';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.ymparistoalue.ymparistoalue_uuid IS 'Ympäristöalueen yksilöivä tunnus UUID';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.ymparistoalue.tyyppi IS 'Ympäristöalueen tyyppi';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.ymparistoalue.pintaala IS 'Ympäristöalueen pinta-ala';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.ymparistoalue.yhtluontipvm IS 'Kohteen luontipäivämäärä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.ymparistoalue.yhtmuokkauspvm IS 'Kohteen viimeisin muokkauspäivämäärä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.ymparistoalue.yhtdatanomistaja IS 'Kaavatiedon omistaja (organisaatio)';
+-- ddl-end --
+ALTER TABLE asemakaavat.ymparistoalue OWNER TO postgres;
+-- ddl-end --
+
+-- object: asemakaava_fk | type: CONSTRAINT --
+-- ALTER TABLE asemakaavat.ymparistoalue DROP CONSTRAINT IF EXISTS asemakaava_fk CASCADE;
+ALTER TABLE asemakaavat.ymparistoalue ADD CONSTRAINT asemakaava_fk FOREIGN KEY (asemakaava_uuid_asemakaava)
+REFERENCES asemakaavat.asemakaava (asemakaava_uuid) MATCH FULL
+ON DELETE CASCADE ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: rakennusala_fk | type: CONSTRAINT --
+-- ALTER TABLE asemakaavat.kaavamaarays DROP CONSTRAINT IF EXISTS Rakennusala_fk CASCADE;
+ALTER TABLE asemakaavat.kaavamaarays ADD CONSTRAINT rakennusala_fk FOREIGN KEY (rakennusala_uuid_rakennusala)
+REFERENCES asemakaavat.rakennusala (rakennusala_uuid) MATCH SIMPLE
+ON DELETE CASCADE ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: ymparistoalue_fk | type: CONSTRAINT --
+-- ALTER TABLE asemakaavat.kaavamaarays DROP CONSTRAINT IF EXISTS ymparistoalue_fk CASCADE;
+ALTER TABLE asemakaavat.kaavamaarays ADD CONSTRAINT ymparistoalue_fk FOREIGN KEY (ymparistoalue_uuid_ymparistoalue)
+REFERENCES asemakaavat.ymparistoalue (ymparistoalue_uuid) MATCH SIMPLE
+ON DELETE CASCADE ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: asemakaavat.visualisointi | type: TABLE --
+-- DROP TABLE IF EXISTS asemakaavat.visualisointi CASCADE;
+CREATE TABLE asemakaavat.visualisointi(
+	gid serial NOT NULL,
+	geom geometry(GEOMETRY, 3879),
+	visualisointi_uuid uuid NOT NULL,
+    tyyppi varchar(100), luokka varchar(100), vanhakohde boolean DEFAULT FALSE, poistettava boolean DEFAULT FALSE,
+    sitova boolean DEFAULT FALSE, kerrosluku varchar(25), teksti varchar(254),
+	yhtluontipvm date, yhtmuokkauspvm date,
+    yhtdatanomistaja varchar(25),
+	angle double precision, x_scale double precision, y_scale double precision,
+	asemakaava_uuid_asemakaava uuid NOT NULL,
+	CONSTRAINT visualisointi_uuid_pk PRIMARY KEY (visualisointi_uuid)
+
+);
+
+COMMENT ON TABLE asemakaavat.visualisointi IS 'Geometria kuvaa visualisoitavaa kohdetta (piste, viiva tai alue)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.visualisointi.geom IS 'Visualisoitavan kohteen geometria';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.visualisointi.visualisointi_uuid IS 'Visualisoitavan kohteen yksilöivä tunnus UUID';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.visualisointi.tyyppi IS 'Visualisoitavan kohteen tyyppi';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.visualisointi.luokka IS 'Visualisoitavan kohteen kohdenimi';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.visualisointi.vanhakohde IS 'Kohde ei ole uusi';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.visualisointi.poistettava IS 'Poistettava kohde, kyllä/ei';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.visualisointi.sitova IS 'Sitova, kyllä/ei';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.visualisointi.kerrosluku IS 'Kerrosluku';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.visualisointi.teksti IS 'Teksti-kenttä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.visualisointi.yhtluontipvm IS 'Kohteen luontipäivämäärä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.visualisointi.yhtmuokkauspvm IS 'Kohteen viimeisin muokkauspäivämäärä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.visualisointi.yhtdatanomistaja IS 'Kaavatiedon omistaja (organisaatio)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.visualisointi.angle IS 'Piste-kohteen kierto';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.visualisointi.x_scale IS 'Piste-kohteen skaalaus x-koordinaatin (itä) suuntaan';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.visualisointi.y_scale IS 'Piste-kohteen skaalaus y-koordinaatin (pohjoinen) suuntaan';
+-- ddl-end --
+ALTER TABLE asemakaavat.visualisointi OWNER TO postgres;
+-- ddl-end --
+
+-- object: asemakaava_fk | type: CONSTRAINT --
+-- ALTER TABLE asemakaavat.visualisointi DROP CONSTRAINT IF EXISTS asemakaava_fk CASCADE;
+ALTER TABLE asemakaavat.visualisointi ADD CONSTRAINT asemakaava_fk FOREIGN KEY (asemakaava_uuid_asemakaava)
+REFERENCES asemakaavat.asemakaava (asemakaava_uuid) MATCH FULL
+ON DELETE CASCADE ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: asemakaavat.valitus | type: TABLE --
+-- DROP TABLE IF EXISTS asemakaavat.valitus CASCADE;
+CREATE TABLE asemakaavat.valitus(
+	gid serial NOT NULL,
+	geom geometry(GEOMETRY, 3879),
+	valitus_uuid uuid NOT NULL,
+    tyyppi varchar(32), kunta numeric(3),
+	sijaintialue numeric(3), ryhma numeric(4),
+	yksikko numeric(4), tehokkuusluku double precision,
+	km2 double precision, lisakm2 double precision, lisakm2kuvaus varchar(32), 
+	lisakm2rivita boolean DEFAULT FALSE, yhteensakm2 double precision, 
+	lisatietoja varchar(100),
+	kellari varchar(32), kerrosluku varchar(10), ullakko varchar, pintaala double precision,
+    yhtluontipvm date, yhtmuokkauspvm date,
+    yhtdatanomistaja varchar(25),
+	asemakaava_uuid_asemakaava uuid NOT NULL,
+	CONSTRAINT valitus_uuid_pk PRIMARY KEY (valitus_uuid)
+
+);
+
+COMMENT ON TABLE asemakaavat.valitus IS 'Geometria kuvaa tontin rajaamaa aluetta';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.valitus.geom IS 'Tontin rajaus';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.valitus.valitus_uuid IS 'Tontin yksilöivä tunnus UUID';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.valitus.tyyppi IS 'Ohjeellinen kaavatontti (Helsingissä)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.valitus.kunta IS 'Kolminumeroinen kuntakoodi (Helsinki 091)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.valitus.sijaintialue IS 'Kaupunginosan numero';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.valitus.ryhma IS 'Korttelin numero';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.valitus.yksikko IS 'Tontin numero';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.valitus.tehokkuusluku IS 'Alueen tehokkuusluku (kerrosalan suhde alueen pinta-alaan)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.valitus.km2 IS 'Rakennusoikeus kerrosneliömetreinä (k-m2)';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.valitus.lisakm2 IS 'Lisärakennusoikeus kerrosneliömetreinä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.valitus.lisakm2kuvaus IS 'Kaavamerkintä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.valitus.lisakm2rivita IS 'Ei käytetä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.valitus.yhteensakm2 IS 'Rakennusoikeus yhteensä kerrosneliömetreinä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.valitus.lisatietoja IS 'Lisätietoja';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.valitus.kellari IS 'Kuinka suuren osan rakennuksen suurimman kerroksen alasta saa kellarikerroksessakäyttää kerrosalaan luettavaksi tilaksi';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.valitus.kerrosluku IS 'Rakennusten, rakennuksen tai sen osan suurin sallittu kerrosluku';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.valitus.ullakko IS 'Kuinka suuren osan rakennuksen suurimman kerroksen alasta ullakon tasollasaa käyttää kerrosalaan luettavaksi tilaksi';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.valitus.pintaala IS 'Tontin pinta-ala';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.valitus.yhtluontipvm IS 'Kohteen luontipäivämäärä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.valitus.yhtmuokkauspvm IS 'Kohteen viimeisin muokkauspäivämäärä';
+-- ddl-end --
+COMMENT ON COLUMN asemakaavat.valitus.yhtdatanomistaja IS 'Kaavatiedon omistaja (organisaatio)';
+-- ddl-end --
+ALTER TABLE asemakaavat.valitus OWNER TO postgres;
+-- ddl-end --
+
+-- object: asemakaava_fk | type: CONSTRAINT --
+-- ALTER TABLE asemakaavat.valitus DROP CONSTRAINT IF EXISTS asemakaava_fk CASCADE;
+ALTER TABLE asemakaavat.valitus ADD CONSTRAINT asemakaava_fk FOREIGN KEY (asemakaava_uuid_asemakaava)
+REFERENCES asemakaavat.asemakaava (asemakaava_uuid) MATCH FULL
+ON DELETE CASCADE ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: koodistot.ra_tyyppi | type: TABLE --
+-- DROP TABLE IF EXISTS koodistot.ra_tyyppi CASCADE;
+CREATE TABLE koodistot.ra_tyyppi(
+	id serial NOT NULL,
+	ra_tyyppi_uuid uuid,
+	nimi varchar(254),
+	lyhenne varchar(5),
+	CONSTRAINT ra_tyyppi_uuid_pk PRIMARY KEY (ra_tyyppi_uuid)
+
+);
+-- ddl-end --
+COMMENT ON TABLE koodistot.ra_tyyppi IS 'Rakennusalan tyyppi';
+-- ddl-end --
+COMMENT ON COLUMN koodistot.ra_tyyppi.ra_tyyppi_uuid IS 'Rakennusalan tyypin yksilöivä tunnus UUID';
+-- ddl-end --
+COMMENT ON COLUMN koodistot.ra_tyyppi.nimi IS 'Rakennusalan tyypin nimi';
+-- ddl-end --
+COMMENT ON COLUMN koodistot.ra_tyyppi.lyhenne IS 'Rakennusalan tyypin lyhenne (voi olla muutakin)';
+-- ddl-end --
+ALTER TABLE koodistot.ra_tyyppi OWNER TO postgres;
+-- ddl-end --
+
+-- object: ra_tyyppi_fk | type: CONSTRAINT --
+-- ALTER TABLE asemakaavat.rakennusala DROP CONSTRAINT IF EXISTS ra_tyyppi_fk CASCADE;
+ALTER TABLE asemakaavat.rakennusala ADD CONSTRAINT ra_tyyppi_fk FOREIGN KEY (ra_tyyppi_uuid_ra_tyyppi)
+REFERENCES koodistot.ra_tyyppi (ra_tyyppi_uuid) MATCH FULL
+ON DELETE CASCADE ON UPDATE CASCADE;
+-- ddl-end --
+
+

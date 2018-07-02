@@ -1,0 +1,1141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.9.0" last-position="0,0" last-zoom="1"
+	 default-schema="public" default-owner="postgres">
+<role name="faddb_admin"
+      superuser="true"
+      inherit="true"
+      login="true"
+      encrypted="true"
+      password="********">
+</role>
+
+<role name="faddb_user"
+      inherit="true"
+      login="true"
+      encrypted="true"
+      password="********">
+</role>
+
+<role name="gstr_admin"
+      superuser="true"
+      inherit="true"
+      login="true"
+      encrypted="true"
+      password="********">
+</role>
+
+<role name="gstr_user"
+      inherit="true"
+      login="true"
+      encrypted="true"
+      password="********">
+</role>
+
+<role name="hki_admin"
+      superuser="true"
+      createdb="true"
+      createrole="true"
+      inherit="true"
+      login="true"
+      encrypted="true"
+      password="********">
+</role>
+
+<database name="hki_mkp_v20180522" encoding="UTF8" lc-collate="en_US.UTF-8" lc-ctype="en_US.UTF-8">
+	<role name="postgres"/>
+	<tablespace name="pg_default"/>
+</database>
+
+<schema name="public" rect-visible="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<extension name="postgis" cur-version="2.3.3">
+	<schema name="public"/>
+	<comment><![CDATA[PostGIS geometry, geography, and raster spatial types and functions]]></comment>
+</extension>
+
+<schema name="asemakaavat" rect-visible="true" fill-color="#6535ac">
+	<role name="postgres"/>
+</schema>
+
+<schema name="koodistot" rect-visible="true" fill-color="#bfd59b">
+	<role name="postgres"/>
+	<comment><![CDATA[Erilaiset koodistot ja luokitukset]]></comment>
+</schema>
+
+<sequence name="asemakaava_gid_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="asemakaava">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Geometria kuvaa asemakaavan rajaamaa aluetta]]></comment>
+	<position x="380" y="35"/>
+	<column name="gid" not-null="true" sequence="asemakaavat.asemakaava_gid_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="geom">
+		<type name="geometry" length="0"/>
+		<comment><![CDATA[Asemakaavan rajaus]]></comment>
+	</column>
+	<column name="asemakaava_uuid" not-null="true">
+		<type name="uuid" length="0"/>
+		<comment><![CDATA[Asemakaavan yksilöivä tunnus UUID]]></comment>
+	</column>
+	<column name="kaavatunnus">
+		<type name="character varying" length="32"/>
+		<comment><![CDATA[Kaavan yksilöivä tunnus (kaavan numero)]]></comment>
+	</column>
+	<column name="hankenumero">
+		<type name="character varying" length="50"/>
+		<comment><![CDATA[Hankenumero]]></comment>
+	</column>
+	<column name="kieli1">
+		<type name="character varying" length="15"/>
+		<comment><![CDATA[Ensimmäinen kieli (Suomi)]]></comment>
+	</column>
+	<column name="kieli2">
+		<type name="character varying" length="15"/>
+		<comment><![CDATA[Toinen kieli (Ruotsi)]]></comment>
+	</column>
+	<column name="kaavanimi1">
+		<type name="character varying" length="32"/>
+		<comment><![CDATA[Kaavan nimi]]></comment>
+	</column>
+	<column name="kaavanimi2">
+		<type name="character varying" length="32"/>
+		<comment><![CDATA[Kaavan täydentävä nimi]]></comment>
+	</column>
+	<column name="kaavanlaatija">
+		<type name="character varying" length="100"/>
+		<comment><![CDATA[Kaavan laatija (henkilö/organisaatio)]]></comment>
+	</column>
+	<column name="hyvaksyja">
+		<type name="character varying" length="32"/>
+		<comment><![CDATA[Kaavan hyväksyjä (viranomainen)]]></comment>
+	</column>
+	<column name="vireilletulopvm">
+		<type name="date" length="0"/>
+		<comment><![CDATA[Kaavan vireilletulopäivämäärä]]></comment>
+	</column>
+	<column name="hyvaksymispvm">
+		<type name="date" length="0"/>
+		<comment><![CDATA[Kaavan hyväksymispäivämäärä]]></comment>
+	</column>
+	<column name="voimaantulopvm">
+		<type name="date" length="0"/>
+		<comment><![CDATA[Kaavan voimaantulopäivämäärä]]></comment>
+	</column>
+	<column name="kuntakoodi">
+		<type name="numeric" length="3" precision="0"/>
+		<comment><![CDATA[Kolminumeroinen kuntakoodi (Helsinki 091)]]></comment>
+	</column>
+	<column name="kaavanvaihe">
+		<type name="character varying" length="30"/>
+		<comment><![CDATA[Kaavan käsittelyvaihe]]></comment>
+	</column>
+	<column name="kaavatyyppi">
+		<type name="character varying" length="32"/>
+		<comment><![CDATA[Kaavan tyyppi (esim. asemakaava, asemakaavan muutos)]]></comment>
+	</column>
+	<column name="kaavatyyppi2">
+		<type name="character varying" length="50"/>
+		<comment><![CDATA[Kaavan tyyppi]]></comment>
+	</column>
+	<column name="aluesijainti">
+		<type name="character varying" length="30"/>
+		<comment><![CDATA[Voimaantulosijainti, Voimassaolosijainti]]></comment>
+	</column>
+	<column name="nahtavillealkupvm">
+		<type name="date" length="0"/>
+		<comment><![CDATA[Asemakaavaehdotuksen nähtävilläolonalkupäivämäärä (viimeisin nähtävilläoloaika)]]></comment>
+	</column>
+	<column name="nahtavillaviimpvm">
+		<type name="date" length="0"/>
+		<comment><![CDATA[Asemakaavaehdotuksen nähtävilläolonloppupäivämäärä (viimeisin nähtävilläoloaika)]]></comment>
+	</column>
+	<column name="kaavamaarayskirjasto">
+		<type name="character varying" length="100"/>
+		<comment><![CDATA[31.3.2000 Ympäristöministeriön asetus MRL:nmukaisista kaavamerkinnöistä]]></comment>
+	</column>
+	<column name="kaavalinkki">
+		<type name="character varying" length="200"/>
+		<comment><![CDATA[Asemakaavan liitteet]]></comment>
+	</column>
+	<column name="pintaala">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Kaava-alueen pinta-ala]]></comment>
+	</column>
+	<column name="lisatietoja">
+		<type name="character varying" length="32"/>
+		<comment><![CDATA[Kaavan hyväksymispäivämäärä]]></comment>
+	</column>
+	<column name="yhtluontipvm">
+		<type name="date" length="0"/>
+		<comment><![CDATA[Kohteen luontipäivämäärä]]></comment>
+	</column>
+	<column name="yhtmuokkauspvm">
+		<type name="date" length="0"/>
+		<comment><![CDATA[Kohteen viimeisin muokkauspäivämäärä]]></comment>
+	</column>
+	<column name="yhtdatanomistaja">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Kaavatiedon omistaja (organisaatio)]]></comment>
+	</column>
+	<constraint name="asemakaava_uuid_pk" type="pk-constr" table="asemakaavat.asemakaava">
+		<columns names="asemakaava_uuid" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="tontti_gid_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="tontti">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Geometria kuvaa tontin rajaamaa aluetta]]></comment>
+	<position x="760" y="610"/>
+	<column name="gid" not-null="true" sequence="asemakaavat.tontti_gid_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="geom">
+		<type name="geometry" length="0"/>
+		<comment><![CDATA[Tontin rajaus]]></comment>
+	</column>
+	<column name="tontti_uuid" not-null="true">
+		<type name="uuid" length="0"/>
+		<comment><![CDATA[Tontin yksilöivä tunnus UUID]]></comment>
+	</column>
+	<column name="tyyppi">
+		<type name="character varying" length="32"/>
+		<comment><![CDATA[Ohjeellinen kaavatontti (Helsingissä)]]></comment>
+	</column>
+	<column name="kunta">
+		<type name="numeric" length="3" precision="0"/>
+		<comment><![CDATA[Kolminumeroinen kuntakoodi (Helsinki 091)]]></comment>
+	</column>
+	<column name="sijaintialue">
+		<type name="numeric" length="3" precision="0"/>
+		<comment><![CDATA[Kaupunginosan numero]]></comment>
+	</column>
+	<column name="ryhma">
+		<type name="numeric" length="4" precision="0"/>
+		<comment><![CDATA[Korttelin numero]]></comment>
+	</column>
+	<column name="yksikko">
+		<type name="numeric" length="4" precision="0"/>
+		<comment><![CDATA[Tontin numero]]></comment>
+	</column>
+	<column name="tehokkuusluku">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Alueen tehokkuusluku (kerrosalan suhde alueen pinta-alaan)]]></comment>
+	</column>
+	<column name="km2">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Rakennusoikeus kerrosneliömetreinä (k-m2)]]></comment>
+	</column>
+	<column name="lisakm2">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Lisärakennusoikeus kerrosneliömetreinä]]></comment>
+	</column>
+	<column name="lisakm2kuvaus">
+		<type name="character varying" length="32"/>
+		<comment><![CDATA[Kaavamerkintä]]></comment>
+	</column>
+	<column name="lisakm2rivita" default-value="false">
+		<type name="boolean" length="0"/>
+		<comment><![CDATA[Ei käytetä]]></comment>
+	</column>
+	<column name="yhteensakm2">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Rakennusoikeus yhteensä kerrosneliömetreinä]]></comment>
+	</column>
+	<column name="lisatietoja">
+		<type name="character varying" length="100"/>
+		<comment><![CDATA[Lisätietoja]]></comment>
+	</column>
+	<column name="kellari">
+		<type name="character varying" length="32"/>
+		<comment><![CDATA[Kuinka suuren osan rakennuksen suurimman kerroksen alasta saa kellarikerroksessakäyttää kerrosalaan luettavaksi tilaksi]]></comment>
+	</column>
+	<column name="kerrosluku">
+		<type name="character varying" length="10"/>
+		<comment><![CDATA[Rakennusten, rakennuksen tai sen osan suurin sallittu kerrosluku]]></comment>
+	</column>
+	<column name="ullakko">
+		<type name="character varying" length="0"/>
+		<comment><![CDATA[Kuinka suuren osan rakennuksen suurimman kerroksen alasta ullakon tasollasaa käyttää kerrosalaan luettavaksi tilaksi]]></comment>
+	</column>
+	<column name="pintaala">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Tontin pinta-ala]]></comment>
+	</column>
+	<column name="yhtluontipvm">
+		<type name="date" length="0"/>
+		<comment><![CDATA[Kohteen luontipäivämäärä]]></comment>
+	</column>
+	<column name="yhtmuokkauspvm">
+		<type name="date" length="0"/>
+		<comment><![CDATA[Kohteen viimeisin muokkauspäivämäärä]]></comment>
+	</column>
+	<column name="yhtdatanomistaja">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Kaavatiedon omistaja (organisaatio)]]></comment>
+	</column>
+	<column name="korttelialue_uuid_korttelialue" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="tontti_uuid_pk" type="pk-constr" table="asemakaavat.tontti">
+		<columns names="tontti_uuid" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="kaavamaarays_gid_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="kaavamaarays">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Geometria kuvaa kaavamääräystä (piste, viiva tai alue)]]></comment>
+	<position x="1040" y="130"/>
+	<column name="gid" not-null="true" sequence="asemakaavat.kaavamaarays_gid_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="geom">
+		<type name="geometry" length="0"/>
+		<comment><![CDATA[Kaavamääräyksen geometria]]></comment>
+	</column>
+	<column name="kaavamaarays_uuid" not-null="true">
+		<type name="uuid" length="0"/>
+		<comment><![CDATA[Kaavamääräyksen yksilöivä tunnus UUID]]></comment>
+	</column>
+	<column name="tyyppi">
+		<type name="character varying" length="100"/>
+		<comment><![CDATA[Kaavamääräyksen tyyppi]]></comment>
+	</column>
+	<column name="luokka">
+		<type name="character varying" length="100"/>
+		<comment><![CDATA[Kaavamääräyksen kohdenimi]]></comment>
+	</column>
+	<column name="teksti">
+		<type name="character varying" length="100"/>
+		<comment><![CDATA[Teksti-kenttä]]></comment>
+	</column>
+	<column name="symbolityyppi">
+		<type name="character varying" length="35"/>
+		<comment><![CDATA[Symbolityyppi]]></comment>
+	</column>
+	<column name="maanalainen" default-value="false">
+		<type name="boolean" length="0"/>
+		<comment><![CDATA[Maanalainen, kyllä/ei]]></comment>
+	</column>
+	<column name="leveys">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Leveys]]></comment>
+	</column>
+	<column name="sitova" default-value="false">
+		<type name="boolean" length="0"/>
+		<comment><![CDATA[Sitova, kyllä/ei]]></comment>
+	</column>
+	<column name="pintaala">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Kaavamääräyksen pinta-ala (aluekohde)]]></comment>
+	</column>
+	<column name="yhtluontipvm">
+		<type name="date" length="0"/>
+		<comment><![CDATA[Kohteen luontipäivämäärä]]></comment>
+	</column>
+	<column name="yhtmuokkauspvm">
+		<type name="date" length="0"/>
+		<comment><![CDATA[Kohteen viimeisin muokkauspäivämäärä]]></comment>
+	</column>
+	<column name="yhtdatanomistaja">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Kaavatiedon omistaja (organisaatio)]]></comment>
+	</column>
+	<column name="angle">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Piste-kohteen kierto]]></comment>
+	</column>
+	<column name="x_scale">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Piste-kohteen skaalaus x-koordinaatin (itä) suuntaan]]></comment>
+	</column>
+	<column name="y_scale">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Piste-kohteen skaalaus y-koordinaatin (pohjoinen) suuntaan]]></comment>
+	</column>
+	<column name="asemakaava_uuid_asemakaava" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="rakennusala_uuid_rakennusala">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="ymparistoalue_uuid_ymparistoalue">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="kaavamaarays_uuid_pk" type="pk-constr" table="asemakaavat.kaavamaarays">
+		<columns names="kaavamaarays_uuid" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="yleinen_tai_muu_alue_gid_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="yleinen_tai_muu_alue">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Geometria kuvaa yleisen tai muun alueen rajaamaa aluetta]]></comment>
+	<position x="40" y="115"/>
+	<column name="gid" not-null="true" sequence="asemakaavat.yleinen_tai_muu_alue_gid_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="geom">
+		<type name="geometry" length="0"/>
+		<comment><![CDATA[Yleisen tai muun alueen rajaus]]></comment>
+	</column>
+	<column name="yleinen_tai_muu_alue_uuid" not-null="true">
+		<type name="uuid" length="0"/>
+		<comment><![CDATA[Yleisen tai muun alueen yksilöivä tunnus UUID]]></comment>
+	</column>
+	<column name="kayttotarkoitus">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Luokka (Alueen käyttötarkoitus esim. virkistysalue)]]></comment>
+	</column>
+	<column name="tyyppi">
+		<type name="character varying" length="100"/>
+		<comment><![CDATA[Kaavamerkintä (Alueen käyttötarkoitusmerkintä)]]></comment>
+	</column>
+	<column name="maanalainen" default-value="false">
+		<type name="boolean" length="0"/>
+		<comment><![CDATA[Maanalainen alue, kyllä/ei]]></comment>
+	</column>
+	<column name="tehokkuusluku">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Alueen tehokkuusluku (kerrosalan suhde alueen pinta-alaan)]]></comment>
+	</column>
+	<column name="kaavamerkinta">
+		<type name="character varying" length="10"/>
+		<comment><![CDATA[Tarkentava kaavamerkintä]]></comment>
+	</column>
+	<column name="km2">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Rakennusoikeus kerrosneliömetreinä (k-m2)]]></comment>
+	</column>
+	<column name="lisakm2">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Lisärakennusoikeus kerrosneliömetreinä]]></comment>
+	</column>
+	<column name="lisakm2rivita" default-value="false">
+		<type name="boolean" length="0"/>
+		<comment><![CDATA[Ei käytetä]]></comment>
+	</column>
+	<column name="yhteensakm2">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Rakennusoikeus yhteensä kerrosneliömetreinä]]></comment>
+	</column>
+	<column name="kellari">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Kuinka suuren osan rakennuksen suurimman kerroksen alasta saa kellarikerroksessakäyttää kerrosalaan luettavaksi tilaksi]]></comment>
+	</column>
+	<column name="kerrosluku">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Rakennusten, rakennuksen tai sen osan suurin sallittu kerrosluku]]></comment>
+	</column>
+	<column name="ullakko">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Kuinka suuren osan rakennuksen suurimman kerroksen alasta ullakon tasollasaa käyttää kerrosalaan luettavaksi tilaksi]]></comment>
+	</column>
+	<column name="korttelinnumero">
+		<type name="character varying" length="8"/>
+		<comment><![CDATA[Ei käytetä]]></comment>
+	</column>
+	<column name="knumerokartalle" default-value="false">
+		<type name="boolean" length="0"/>
+		<comment><![CDATA[Ei käytetä]]></comment>
+	</column>
+	<column name="pintaala">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Yleisen tai muun alueen pinta-ala]]></comment>
+	</column>
+	<column name="lisatietoja">
+		<type name="character varying" length="32"/>
+		<comment><![CDATA[Lisätietoja]]></comment>
+	</column>
+	<column name="lisakm2kuvaus">
+		<type name="character varying" length="100"/>
+		<comment><![CDATA[Kaavamerkintä]]></comment>
+	</column>
+	<column name="yhtluontipvm">
+		<type name="date" length="0"/>
+		<comment><![CDATA[Kohteen luontipäivämäärä]]></comment>
+	</column>
+	<column name="yhtmuokkauspvm">
+		<type name="date" length="0"/>
+		<comment><![CDATA[Kohteen viimeisin muokkauspäivämäärä]]></comment>
+	</column>
+	<column name="yhtdatanomistaja">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Kaavatiedon omistaja (organisaatio)]]></comment>
+	</column>
+	<column name="asemakaava_uuid_asemakaava" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="yleinen_tai_muu_alue_uuid_pk" type="pk-constr" table="asemakaavat.yleinen_tai_muu_alue">
+		<columns names="yleinen_tai_muu_alue_uuid" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="korttelialue_gid_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="korttelialue">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Geometria kuvaa korttelin tai korttelinosan rajaamaa aluetta]]></comment>
+	<position x="460" y="610"/>
+	<column name="gid" not-null="true" sequence="asemakaavat.korttelialue_gid_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="geom">
+		<type name="geometry" length="0"/>
+		<comment><![CDATA[Korttelin tai korttelinosan rajaus]]></comment>
+	</column>
+	<column name="korttelialue_uuid" not-null="true">
+		<type name="uuid" length="0"/>
+		<comment><![CDATA[Korttelialueen yksilöivä tunnus UUID]]></comment>
+	</column>
+	<column name="kayttotarkoitus">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Luokka (Kortteli tai korttelin osa)]]></comment>
+	</column>
+	<column name="tyyppi">
+		<type name="character varying" length="100"/>
+		<comment><![CDATA[Kaavamerkintä (Alueen käyttötarkoitusmerkintä)]]></comment>
+	</column>
+	<column name="maanalainen" default-value="false">
+		<type name="boolean" length="0"/>
+		<comment><![CDATA[Maanalainen korttelialue, kyllä/ei]]></comment>
+	</column>
+	<column name="tehokkuusluku">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Alueen tehokkuusluku (kerrosalan suhde alueen pinta-alaan)]]></comment>
+	</column>
+	<column name="kaavamerkinta">
+		<type name="character varying" length="10"/>
+		<comment><![CDATA[Tarkentava kaavamerkintä]]></comment>
+	</column>
+	<column name="km2">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Rakennusoikeus kerrosneliömetreinä (k-m2)]]></comment>
+	</column>
+	<column name="lisakm2">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Lisärakennusoikeus kerrosneliömetreinä]]></comment>
+	</column>
+	<column name="lisakm2rivita" default-value="false">
+		<type name="boolean" length="0"/>
+		<comment><![CDATA[Ei käytetä]]></comment>
+	</column>
+	<column name="yhteensakm2">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Rakennusoikeus yhteensä kerrosneliömetreinä]]></comment>
+	</column>
+	<column name="kellari">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Kuinka suuren osan rakennuksen suurimman kerroksen alasta saa kellarikerroksessakäyttää kerrosalaan luettavaksi tilaksi]]></comment>
+	</column>
+	<column name="kerrosluku">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Rakennusten, rakennuksen tai sen osan suurin sallittu kerrosluku]]></comment>
+	</column>
+	<column name="ullakko">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Kuinka suuren osan rakennuksen suurimman kerroksen alasta ullakon tasollasaa käyttää kerrosalaan luettavaksi tilaksi]]></comment>
+	</column>
+	<column name="korttelinnumero">
+		<type name="character varying" length="8"/>
+		<comment><![CDATA[Korttelinnumero]]></comment>
+	</column>
+	<column name="knumerokartalle" default-value="false">
+		<type name="boolean" length="0"/>
+		<comment><![CDATA[Korttelinumero kartalle, kyllä/ei]]></comment>
+	</column>
+	<column name="pintaala">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Korttelialueen pinta-ala]]></comment>
+	</column>
+	<column name="lisatietoja">
+		<type name="character varying" length="32"/>
+		<comment><![CDATA[Lisätietoja]]></comment>
+	</column>
+	<column name="lisakm2kuvaus">
+		<type name="character varying" length="100"/>
+		<comment><![CDATA[Kaavamerkintä]]></comment>
+	</column>
+	<column name="yhtluontipvm">
+		<type name="date" length="0"/>
+		<comment><![CDATA[Kohteen luontipäivämäärä]]></comment>
+	</column>
+	<column name="yhtmuokkauspvm">
+		<type name="date" length="0"/>
+		<comment><![CDATA[Kohteen viimeisin muokkauspäivämäärä]]></comment>
+	</column>
+	<column name="yhtdatanomistaja">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Kaavatiedon omistaja (organisaatio)]]></comment>
+	</column>
+	<column name="asemakaava_uuid_asemakaava" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="korttelialue_uuid_pk" type="pk-constr" table="asemakaavat.korttelialue">
+		<columns names="korttelialue_uuid" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="rakennusala_gid_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="rakennusala">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Geometria kuvaa rakennusalan rajaamaa aluetta]]></comment>
+	<position x="760" y="295"/>
+	<column name="gid" not-null="true" sequence="asemakaavat.rakennusala_gid_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="geom">
+		<type name="geometry" length="0"/>
+		<comment><![CDATA[Rakennusalan rajaus]]></comment>
+	</column>
+	<column name="rakennusala_uuid" not-null="true">
+		<type name="uuid" length="0"/>
+		<comment><![CDATA[Rakennusalan yksilöivä tunnus UUID]]></comment>
+	</column>
+	<column name="tyyppi">
+		<type name="character varying" length="35"/>
+		<comment><![CDATA[Rakennusalan tyyppi (esim. Rakennusala, Suojeltu rakennus…)]]></comment>
+	</column>
+	<column name="maanalainen" default-value="false">
+		<type name="boolean" length="0"/>
+		<comment><![CDATA[Maanalainen korttelialue, kyllä/ei]]></comment>
+	</column>
+	<column name="tehokkuusluku">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Alueen tehokkuusluku (kerrosalan suhde alueen pinta-alaan)]]></comment>
+	</column>
+	<column name="kaavamerkinta">
+		<type name="character varying" length="20"/>
+		<comment><![CDATA[Kaavamerkintä (rakennusalan käyttötarkoitusmerkintä)]]></comment>
+	</column>
+	<column name="km2">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Rakennusoikeus kerrosneliömetreinä (k-m2)]]></comment>
+	</column>
+	<column name="lisakm2">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Lisärakennusoikeus kerrosneliömetreinä]]></comment>
+	</column>
+	<column name="lisakm2rivita" default-value="false">
+		<type name="boolean" length="0"/>
+		<comment><![CDATA[Ei käytetä]]></comment>
+	</column>
+	<column name="kellari">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Kuinka suuren osan rakennuksen suurimman kerroksen alasta saa kellarikerroksessakäyttää kerrosalaan luettavaksi tilaksi]]></comment>
+	</column>
+	<column name="kerrosluku">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Rakennusten, rakennuksen tai sen osan suurin sallittu kerrosluku]]></comment>
+	</column>
+	<column name="ullakko">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Kuinka suuren osan rakennuksen suurimman kerroksen alasta ullakon tasollasaa käyttää kerrosalaan luettavaksi tilaksi]]></comment>
+	</column>
+	<column name="varisavy">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[(haetaan värisävy käyttötarkoitusmerkinnän mukaisesti alasvetovalikosta, visuaalinen tieto)]]></comment>
+	</column>
+	<column name="sitova" default-value="false">
+		<type name="boolean" length="0"/>
+		<comment><![CDATA[Oletus Sitova (rakennusala)]]></comment>
+	</column>
+	<column name="pintaala">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Rakennusalan pinta-ala]]></comment>
+	</column>
+	<column name="lisatietoja">
+		<type name="character varying" length="32"/>
+		<comment><![CDATA[Lisätietoja]]></comment>
+	</column>
+	<column name="lisakm2kuvaus">
+		<type name="character varying" length="5"/>
+		<comment><![CDATA[Kaavamerkintä]]></comment>
+	</column>
+	<column name="yhtluontipvm">
+		<type name="date" length="0"/>
+		<comment><![CDATA[Kohteen luontipäivämäärä]]></comment>
+	</column>
+	<column name="yhtmuokkauspvm">
+		<type name="date" length="0"/>
+		<comment><![CDATA[Kohteen viimeisin muokkauspäivämäärä]]></comment>
+	</column>
+	<column name="yhtdatanomistaja">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Kaavatiedon omistaja (organisaatio)]]></comment>
+	</column>
+	<column name="asemakaava_uuid_asemakaava" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="ra_tyyppi_uuid_ra_tyyppi" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="rakennusala_uuid_pk" type="pk-constr" table="asemakaavat.rakennusala">
+		<columns names="rakennusala_uuid" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="ymparistoalue_gid_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="ymparistoalue">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Geometria kuvaa ympäristöalueen rajaamaa aluetta]]></comment>
+	<position x="760" y="55"/>
+	<column name="gid" not-null="true" sequence="asemakaavat.ymparistoalue_gid_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="geom">
+		<type name="geometry" length="0"/>
+		<comment><![CDATA[Ympäristöalueen rajaus]]></comment>
+	</column>
+	<column name="ymparistoalue_uuid" not-null="true">
+		<type name="uuid" length="0"/>
+		<comment><![CDATA[Ympäristöalueen yksilöivä tunnus UUID]]></comment>
+	</column>
+	<column name="tyyppi">
+		<type name="character varying" length="30"/>
+		<comment><![CDATA[Ympäristöalueen tyyppi]]></comment>
+	</column>
+	<column name="pintaala">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Ympäristöalueen pinta-ala]]></comment>
+	</column>
+	<column name="yhtluontipvm">
+		<type name="date" length="0"/>
+		<comment><![CDATA[Kohteen luontipäivämäärä]]></comment>
+	</column>
+	<column name="yhtmuokkauspvm">
+		<type name="date" length="0"/>
+		<comment><![CDATA[Kohteen viimeisin muokkauspäivämäärä]]></comment>
+	</column>
+	<column name="yhtdatanomistaja">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Kaavatiedon omistaja (organisaatio)]]></comment>
+	</column>
+	<column name="asemakaava_uuid_asemakaava" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="ymparistoalue_uuid_pk" type="pk-constr" table="asemakaavat.ymparistoalue">
+		<columns names="ymparistoalue_uuid" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="visualisointi_gid_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="visualisointi">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Geometria kuvaa visualisoitavaa kohdetta (piste, viiva tai alue)]]></comment>
+	<position x="240" y="635"/>
+	<column name="gid" not-null="true" sequence="asemakaavat.visualisointi_gid_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="geom">
+		<type name="geometry" length="0"/>
+		<comment><![CDATA[Visualisoitavan kohteen geometria]]></comment>
+	</column>
+	<column name="visualisointi_uuid" not-null="true">
+		<type name="uuid" length="0"/>
+		<comment><![CDATA[Visualisoitavan kohteen yksilöivä tunnus UUID]]></comment>
+	</column>
+	<column name="tyyppi">
+		<type name="character varying" length="100"/>
+		<comment><![CDATA[Visualisoitavan kohteen tyyppi]]></comment>
+	</column>
+	<column name="luokka">
+		<type name="character varying" length="100"/>
+		<comment><![CDATA[Visualisoitavan kohteen kohdenimi]]></comment>
+	</column>
+	<column name="vanhakohde" default-value="false">
+		<type name="boolean" length="0"/>
+		<comment><![CDATA[Kohde ei ole uusi]]></comment>
+	</column>
+	<column name="poistettava" default-value="false">
+		<type name="boolean" length="0"/>
+		<comment><![CDATA[Poistettava kohde, kyllä/ei]]></comment>
+	</column>
+	<column name="sitova" default-value="false">
+		<type name="boolean" length="0"/>
+		<comment><![CDATA[Sitova, kyllä/ei]]></comment>
+	</column>
+	<column name="kerrosluku">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Kerrosluku]]></comment>
+	</column>
+	<column name="teksti">
+		<type name="character varying" length="254"/>
+		<comment><![CDATA[Teksti-kenttä]]></comment>
+	</column>
+	<column name="yhtluontipvm">
+		<type name="date" length="0"/>
+		<comment><![CDATA[Kohteen luontipäivämäärä]]></comment>
+	</column>
+	<column name="yhtmuokkauspvm">
+		<type name="date" length="0"/>
+		<comment><![CDATA[Kohteen viimeisin muokkauspäivämäärä]]></comment>
+	</column>
+	<column name="yhtdatanomistaja">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Kaavatiedon omistaja (organisaatio)]]></comment>
+	</column>
+	<column name="angle">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Piste-kohteen kierto]]></comment>
+	</column>
+	<column name="x_scale">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Piste-kohteen skaalaus x-koordinaatin (itä) suuntaan]]></comment>
+	</column>
+	<column name="y_scale">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Piste-kohteen skaalaus y-koordinaatin (pohjoinen) suuntaan]]></comment>
+	</column>
+	<column name="asemakaava_uuid_asemakaava" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="visualisointi_uuid_pk" type="pk-constr" table="asemakaavat.visualisointi">
+		<columns names="visualisointi_uuid" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="valitus_gid_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="valitus">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Geometria kuvaa tontin rajaamaa aluetta]]></comment>
+	<position x="40" y="375"/>
+	<column name="gid" not-null="true" sequence="asemakaavat.valitus_gid_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="geom">
+		<type name="geometry" length="0"/>
+		<comment><![CDATA[Tontin rajaus]]></comment>
+	</column>
+	<column name="valitus_uuid" not-null="true">
+		<type name="uuid" length="0"/>
+		<comment><![CDATA[Tontin yksilöivä tunnus UUID]]></comment>
+	</column>
+	<column name="tyyppi">
+		<type name="character varying" length="32"/>
+		<comment><![CDATA[Ohjeellinen kaavatontti (Helsingissä)]]></comment>
+	</column>
+	<column name="kunta">
+		<type name="numeric" length="3" precision="0"/>
+		<comment><![CDATA[Kolminumeroinen kuntakoodi (Helsinki 091)]]></comment>
+	</column>
+	<column name="sijaintialue">
+		<type name="numeric" length="3" precision="0"/>
+		<comment><![CDATA[Kaupunginosan numero]]></comment>
+	</column>
+	<column name="ryhma">
+		<type name="numeric" length="4" precision="0"/>
+		<comment><![CDATA[Korttelin numero]]></comment>
+	</column>
+	<column name="yksikko">
+		<type name="numeric" length="4" precision="0"/>
+		<comment><![CDATA[Tontin numero]]></comment>
+	</column>
+	<column name="tehokkuusluku">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Alueen tehokkuusluku (kerrosalan suhde alueen pinta-alaan)]]></comment>
+	</column>
+	<column name="km2">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Rakennusoikeus kerrosneliömetreinä (k-m2)]]></comment>
+	</column>
+	<column name="lisakm2">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Lisärakennusoikeus kerrosneliömetreinä]]></comment>
+	</column>
+	<column name="lisakm2kuvaus">
+		<type name="character varying" length="32"/>
+		<comment><![CDATA[Kaavamerkintä]]></comment>
+	</column>
+	<column name="lisakm2rivita" default-value="false">
+		<type name="boolean" length="0"/>
+		<comment><![CDATA[Ei käytetä]]></comment>
+	</column>
+	<column name="yhteensakm2">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Rakennusoikeus yhteensä kerrosneliömetreinä]]></comment>
+	</column>
+	<column name="lisatietoja">
+		<type name="character varying" length="100"/>
+		<comment><![CDATA[Lisätietoja]]></comment>
+	</column>
+	<column name="kellari">
+		<type name="character varying" length="32"/>
+		<comment><![CDATA[Kuinka suuren osan rakennuksen suurimman kerroksen alasta saa kellarikerroksessakäyttää kerrosalaan luettavaksi tilaksi]]></comment>
+	</column>
+	<column name="kerrosluku">
+		<type name="character varying" length="10"/>
+		<comment><![CDATA[Rakennusten, rakennuksen tai sen osan suurin sallittu kerrosluku]]></comment>
+	</column>
+	<column name="ullakko">
+		<type name="character varying" length="0"/>
+		<comment><![CDATA[Kuinka suuren osan rakennuksen suurimman kerroksen alasta ullakon tasollasaa käyttää kerrosalaan luettavaksi tilaksi]]></comment>
+	</column>
+	<column name="pintaala">
+		<type name="double precision" length="0"/>
+		<comment><![CDATA[Tontin pinta-ala]]></comment>
+	</column>
+	<column name="yhtluontipvm">
+		<type name="date" length="0"/>
+		<comment><![CDATA[Kohteen luontipäivämäärä]]></comment>
+	</column>
+	<column name="yhtmuokkauspvm">
+		<type name="date" length="0"/>
+		<comment><![CDATA[Kohteen viimeisin muokkauspäivämäärä]]></comment>
+	</column>
+	<column name="yhtdatanomistaja">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Kaavatiedon omistaja (organisaatio)]]></comment>
+	</column>
+	<column name="asemakaava_uuid_asemakaava" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="valitus_uuid_pk" type="pk-constr" table="asemakaavat.valitus">
+		<columns names="valitus_uuid" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="ra_tyyppi_id_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="koodistot"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="ra_tyyppi">
+	<schema name="koodistot"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Rakennusalan tyyppi]]></comment>
+	<position x="1340" y="440"/>
+	<column name="id" not-null="true" sequence="koodistot.ra_tyyppi_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="ra_tyyppi_uuid" not-null="true">
+		<type name="uuid" length="0"/>
+		<comment><![CDATA[Rakennusalan tyypin yksilöivä tunnus UUID]]></comment>
+	</column>
+	<column name="nimi">
+		<type name="character varying" length="254"/>
+		<comment><![CDATA[Rakennusalan tyypin nimi]]></comment>
+	</column>
+	<column name="lyhenne">
+		<type name="character varying" length="5"/>
+		<comment><![CDATA[Rakennusalan tyypin lyhenne (voi olla muutakin)]]></comment>
+	</column>
+	<constraint name="ra_tyyppi_uuid_pk" type="pk-constr" table="koodistot.ra_tyyppi">
+		<columns names="ra_tyyppi_uuid" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<constraint name="korttelialue_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="CASCADE" ref-table="asemakaavat.korttelialue" table="asemakaavat.tontti">
+	<columns names="korttelialue_uuid_korttelialue" ref-type="src-columns"/>
+	<columns names="korttelialue_uuid" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="asemakaava_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="CASCADE" ref-table="asemakaavat.asemakaava" table="asemakaavat.kaavamaarays">
+	<columns names="asemakaava_uuid_asemakaava" ref-type="src-columns"/>
+	<columns names="asemakaava_uuid" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="rakennusala_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="CASCADE" del-action="CASCADE" ref-table="asemakaavat.rakennusala" table="asemakaavat.kaavamaarays">
+	<columns names="rakennusala_uuid_rakennusala" ref-type="src-columns"/>
+	<columns names="rakennusala_uuid" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="ymparistoalue_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="CASCADE" del-action="CASCADE" ref-table="asemakaavat.ymparistoalue" table="asemakaavat.kaavamaarays">
+	<columns names="ymparistoalue_uuid_ymparistoalue" ref-type="src-columns"/>
+	<columns names="ymparistoalue_uuid" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="asemakaava_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="CASCADE" ref-table="asemakaavat.asemakaava" table="asemakaavat.yleinen_tai_muu_alue">
+	<columns names="asemakaava_uuid_asemakaava" ref-type="src-columns"/>
+	<columns names="asemakaava_uuid" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="asemakaava_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="CASCADE" ref-table="asemakaavat.asemakaava" table="asemakaavat.korttelialue">
+	<columns names="asemakaava_uuid_asemakaava" ref-type="src-columns"/>
+	<columns names="asemakaava_uuid" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="asemakaava_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="CASCADE" ref-table="asemakaavat.asemakaava" table="asemakaavat.rakennusala">
+	<columns names="asemakaava_uuid_asemakaava" ref-type="src-columns"/>
+	<columns names="asemakaava_uuid" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="ra_tyyppi_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="CASCADE" ref-table="koodistot.ra_tyyppi" table="asemakaavat.rakennusala">
+	<columns names="ra_tyyppi_uuid_ra_tyyppi" ref-type="src-columns"/>
+	<columns names="ra_tyyppi_uuid" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="asemakaava_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="CASCADE" ref-table="asemakaavat.asemakaava" table="asemakaavat.ymparistoalue">
+	<columns names="asemakaava_uuid_asemakaava" ref-type="src-columns"/>
+	<columns names="asemakaava_uuid" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="asemakaava_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="CASCADE" ref-table="asemakaavat.asemakaava" table="asemakaavat.visualisointi">
+	<columns names="asemakaava_uuid_asemakaava" ref-type="src-columns"/>
+	<columns names="asemakaava_uuid" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="asemakaava_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="CASCADE" ref-table="asemakaavat.asemakaava" table="asemakaavat.valitus">
+	<columns names="asemakaava_uuid_asemakaava" ref-type="src-columns"/>
+	<columns names="asemakaava_uuid" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="rel_tontti_korttelialue" type="relfk"
+	 custom-color="#e56dfd"
+	 src-table="asemakaavat.tontti"
+	 dst-table="asemakaavat.korttelialue"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_kaavamaarays_asemakaava" type="relfk"
+	 custom-color="#ef2bbe"
+	 src-table="asemakaavat.kaavamaarays"
+	 dst-table="asemakaavat.asemakaava"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_kaavamaarays_rakennusala" type="relfk"
+	 custom-color="#c34592"
+	 src-table="asemakaavat.kaavamaarays"
+	 dst-table="asemakaavat.rakennusala"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_kaavamaarays_ymparistoalue" type="relfk"
+	 custom-color="#6f2aaf"
+	 src-table="asemakaavat.kaavamaarays"
+	 dst-table="asemakaavat.ymparistoalue"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_yleinen_tai_muu_alue_asemakaava" type="relfk"
+	 custom-color="#c54b73"
+	 src-table="asemakaavat.yleinen_tai_muu_alue"
+	 dst-table="asemakaavat.asemakaava"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_korttelialue_asemakaava" type="relfk"
+	 custom-color="#94bbf3"
+	 src-table="asemakaavat.korttelialue"
+	 dst-table="asemakaavat.asemakaava"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_rakennusala_asemakaava" type="relfk"
+	 custom-color="#148ad8"
+	 src-table="asemakaavat.rakennusala"
+	 dst-table="asemakaavat.asemakaava"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_rakennusala_ra_tyyppi" type="relfk"
+	 custom-color="#2465bc"
+	 src-table="asemakaavat.rakennusala"
+	 dst-table="koodistot.ra_tyyppi"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_ymparistoalue_asemakaava" type="relfk"
+	 custom-color="#903c5a"
+	 src-table="asemakaavat.ymparistoalue"
+	 dst-table="asemakaavat.asemakaava"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_visualisointi_asemakaava" type="relfk"
+	 custom-color="#ce4670"
+	 src-table="asemakaavat.visualisointi"
+	 dst-table="asemakaavat.asemakaava"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_valitus_asemakaava" type="relfk"
+	 custom-color="#b68d08"
+	 src-table="asemakaavat.valitus"
+	 dst-table="asemakaavat.asemakaava"
+	 src-required="false" dst-required="false"/>
+
+</dbmodel>
