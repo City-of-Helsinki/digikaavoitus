@@ -9,4 +9,4 @@ Nykytilassa kaavatiedon louhiminen, jalostaminen ja siirtäminen eri kaavavaihei
 https://sanastot.suomi.fi/ -> Rakennettu ympäristö
 
 ## Hankkeen loppuraportti liitteineen
-www.avoindata.fi/data/fi/dataset/helsingin-asemakaavat-yhteisena-tietovarantona
+https://www.avoindata.fi/data/fi/dataset/kiradigi_helsingin-asemakaavat-yhteisena-tietovarantona
