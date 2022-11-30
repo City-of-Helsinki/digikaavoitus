@@ -1,0 +1,988 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.9.0" last-position="0,0" last-zoom="0.95"
+	 default-schema="public" default-owner="postgres">
+<database name="Asemakaavat" encoding="UTF8">
+	<role name="postgres"/>
+	<tablespace name="pg_default"/>
+	<prepended-sql><![CDATA[CREATE EXTENSION IF NOT EXISTS POSTGIS;]]></prepended-sql>
+</database>
+
+<tag name="Kaavamääräys">
+	<style id="table-body" colors="#ffffff,#ffffff,#808080"/>
+	<style id="table-ext-body" colors="#ffffff,#ffffff,#808080"/>
+	<style id="table-name" colors="#000000"/>
+	<style id="table-schema-name" colors="#000000"/>
+	<style id="table-title" colors="#00ff7f,#00ff7f,#00aa7f"/>
+	<comment><![CDATA[Kaavamääräysten taulut]]></comment>
+</tag>
+<tag name="Alueet">
+	<style id="table-body" colors="#fcfcfc,#fcfcfc,#808080"/>
+	<style id="table-ext-body" colors="#fcfcfc,#fcfcfc,#808080"/>
+	<style id="table-name" colors="#000000"/>
+	<style id="table-schema-name" colors="#000000"/>
+	<style id="table-title" colors="#ffaa00,#ffaa7f,#20486f"/>
+	<comment><![CDATA[Kaavan alueiden kuvaukset]]></comment>
+</tag>
+<schema name="public" rect-visible="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<schema name="asemakaavat" rect-visible="true" fill-color="#d5ff00">
+	<role name="postgres"/>
+</schema>
+
+<table name="Asemakaava">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Geometria kuvaa asemakaavan ulkoraja]]></comment>
+	<position x="1260" y="80"/>
+	<column name="gid">
+		<type name="serial" length="1"/>
+	</column>
+	<column name="geom">
+		<type name="geometry" length="1" spatial-type="MULTISURFACE" variation="1" srid="3878"/>
+		<comment><![CDATA[Asemakaavan ulkoraja]]></comment>
+	</column>
+	<column name="Asemakaava__uuid" not-null="true">
+		<type name="uuid" length="1"/>
+	</column>
+	<column name="Kaavatunnus">
+		<type name="varchar" length="20"/>
+	</column>
+	<column name="Hanketunnus">
+		<type name="varchar" length="20"/>
+	</column>
+	<column name="Kieli1">
+		<type name="varchar" length="10"/>
+	</column>
+	<column name="Kieli2">
+		<type name="varchar" length="10"/>
+	</column>
+	<column name="Kaavanimi1">
+		<type name="varchar" length="50"/>
+		<comment><![CDATA[Asemakaavan nimi]]></comment>
+	</column>
+	<column name="Kaavanimi2">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="Kaavanlaatija">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="Hyvaksyja">
+		<type name="varchar" length="50"/>
+		<comment><![CDATA[Kaavan hyväksyjä]]></comment>
+	</column>
+	<column name="VireilletuloPVM">
+		<type name="date" length="1"/>
+		<comment><![CDATA[Vireille tulo päivämäärä]]></comment>
+	</column>
+	<column name="HyvaksymisPVM">
+		<type name="date" length="1"/>
+		<comment><![CDATA[Hyväksymis päivämäärä]]></comment>
+	</column>
+	<column name="VoimaantuloPVM">
+		<type name="date" length="1"/>
+		<comment><![CDATA[Voimaantulo päivämäärä]]></comment>
+	</column>
+	<column name="Kuntakoodi">
+		<type name="smallint" length="1"/>
+	</column>
+	<column name="KaavanVaihe">
+		<type name="smallint" length="1"/>
+	</column>
+	<column name="Kaavatyyppi">
+		<type name="smallint" length="1"/>
+		<comment><![CDATA[Kaavantyyppi]]></comment>
+	</column>
+	<column name="Kaavatyyppi2">
+		<type name="smallint" length="1"/>
+	</column>
+	<column name="Aluesijainti">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="NahtavilleAlkuPVM">
+		<type name="date" length="0"/>
+	</column>
+	<column name="NahtavilleViimPVM">
+		<type name="date" length="0"/>
+	</column>
+	<column name="Kaavamaarayskirjasto">
+		<type name="varchar" length="200"/>
+	</column>
+	<column name="Kaavalinkki">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="PintaAla">
+		<type name="real" length="0"/>
+	</column>
+	<column name="LuontiPVM">
+		<type name="date" length="0"/>
+	</column>
+	<column name="DatanLuoja">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="MuokkausPVM">
+		<type name="date" length="0"/>
+	</column>
+	<column name="DatanMuokkaaja">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="HistoriaPVM">
+		<type name="date" length="0"/>
+	</column>
+	<column name="DatanOmistaja">
+		<type name="varchar" length="50"/>
+	</column>
+	<constraint name="asemakaava_uuid_pk" type="pk-constr" table="asemakaavat.&quot;Asemakaava&quot;">
+		<columns names="Asemakaava__uuid" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="Tontti">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+	<tag name="Alueet"/>
+	<position x="1300" y="760"/>
+	<column name="gid">
+		<type name="serial" length="1"/>
+	</column>
+	<column name="geom">
+		<type name="geometry" length="1" spatial-type="MULTISURFACE" variation="1" srid="3878"/>
+	</column>
+	<column name="Tontti_uuid" not-null="true">
+		<type name="smallint" length="1"/>
+	</column>
+	<column name="Tyyppi">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="Kunta">
+		<type name="char" length="3"/>
+	</column>
+	<column name="SijaintiAlue">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="Ryhma">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="Yksikko">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="KohteenVaihe">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="Tehokkuusluku">
+		<type name="real" length="0"/>
+	</column>
+	<column name="Km2">
+		<type name="real" length="0"/>
+	</column>
+	<column name="LisaKm2">
+		<type name="real" length="0"/>
+	</column>
+	<column name="LisaKm2Kuvaus">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="YhteensaKm2">
+		<type name="real" length="0"/>
+	</column>
+	<column name="KaytettyKm2">
+		<type name="real" length="0"/>
+	</column>
+	<column name="Poistettava">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="Lisatietoja">
+		<type name="varchar" length="200"/>
+	</column>
+	<column name="Kellari">
+		<type name="real" length="0"/>
+	</column>
+	<column name="Kerrosluku">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="Ullakko">
+		<type name="real" length="0"/>
+	</column>
+	<column name="PintaAla">
+		<type name="real" length="0"/>
+	</column>
+	<column name="LuontiPVM">
+		<type name="date" length="0"/>
+	</column>
+	<column name="DatanLuoja">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="MuokkausPVM">
+		<type name="date" length="0"/>
+	</column>
+	<column name="DatanMuokkaaja">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="HistoriaPVM">
+		<type name="date" length="0"/>
+	</column>
+	<column name="DatanOmistaja">
+		<type name="varchar" length="50"/>
+	</column>
+	<constraint name="tontti_uuid_pk" type="pk-constr" table="asemakaavat.&quot;Tontti&quot;">
+		<columns names="Tontti_uuid" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="Korttelialue_uuid_KortteliAlue" index="27"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="KortteliAlue_fk" index="1"/>
+	</customidxs>
+</table>
+
+<usertype name="AlueidenKayttotarkoitus" configuration="enumeration">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Asemakaava-alueiden käyttötarkoitukset]]></comment>
+	<enumeration values="A,P,Y,C,K,T,Virkistysalue,Liikennealue,Erityisalue,Suojelualue,Vesialue,Loma- ja matkailualue,Maa- ja metsätalousalue"/>
+</usertype>
+
+<table name="KaavaMaarays">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+	<tag name="Kaavamääräys"/>
+	<position x="1860" y="100"/>
+	<column name="gid">
+		<type name="serial" length="1"/>
+	</column>
+	<column name="geom_point">
+		<type name="geometry" length="1" spatial-type="MULTIPOINT" variation="1" srid="3878"/>
+	</column>
+	<column name="geom_line">
+		<type name="geometry" length="1" spatial-type="MULTICURVE" variation="1" srid="3878"/>
+	</column>
+	<column name="geom_poly">
+		<type name="geometry" length="1" spatial-type="MULTISURFACE" variation="1" srid="3878"/>
+	</column>
+	<column name="kaavamaarays_uuid" not-null="true">
+		<type name="uuid" length="1"/>
+	</column>
+	<column name="Luokka">
+		<type name="smallint" length="1"/>
+	</column>
+	<column name="Tyyppi">
+		<type name="smallint" length="1"/>
+	</column>
+	<column name="KohdeNimi">
+		<type name="varchar" length="200"/>
+	</column>
+	<constraint name="kaavamaarays_uuid_pk" type="pk-constr" table="asemakaavat.&quot;KaavaMaarays&quot;">
+		<columns names="kaavamaarays_uuid" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="Asemakaava__uuid_Asemakaava" index="8"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="Asemakaava_fk" index="1"/>
+	</customidxs>
+</table>
+
+<textbox name="TitleLabel" bold="true" font-size="14">
+	<position x="20" y="20"/>
+	<comment><![CDATA[Kiradigi - Helsinki - Asemakaavan tietomalli]]></comment>
+</textbox>
+
+<table name="YleinenAlue_MuuAlue">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+	<tag name="Alueet"/>
+	<position x="540" y="120"/>
+	<column name="gid">
+		<type name="serial" length="1"/>
+	</column>
+	<column name="geom">
+		<type name="geometry" length="1" spatial-type="MULTISURFACE" variation="1" srid="3878"/>
+	</column>
+	<column name="YleinenAlue_uuid" not-null="true">
+		<type name="uuid" length="1"/>
+	</column>
+	<column name="Maanalainen">
+		<type name="boolean" length="1"/>
+	</column>
+	<column name="KohteenVaihe">
+		<type name="smallint" length="1"/>
+	</column>
+	<column name="Tehokkuusluku">
+		<type name="real" length="1"/>
+	</column>
+	<column name="Kaavamerkinta">
+		<type name="char" length="5"/>
+		<comment><![CDATA[Kaavamerkintä]]></comment>
+	</column>
+	<column name="Km2">
+		<type name="real" length="1"/>
+		<comment><![CDATA[Kerrosneliömetrit]]></comment>
+	</column>
+	<column name="LisaKm2">
+		<type name="real" length="1"/>
+		<comment><![CDATA[Lisä-kerrosneliömetrit]]></comment>
+	</column>
+	<column name="KaytettyKm2">
+		<type name="real" length="1"/>
+		<comment><![CDATA[Käytetyt kerrosneliömetrit]]></comment>
+	</column>
+	<column name="Kellari">
+		<type name="real" length="1"/>
+	</column>
+	<column name="Kerrosluku">
+		<type name="real" length="1"/>
+	</column>
+	<column name="Ullakko">
+		<type name="real" length="1"/>
+	</column>
+	<column name="Korttelinumero">
+		<type name="smallint" length="1"/>
+	</column>
+	<column name="KnumeroKartalle">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="PintaAla">
+		<type name="real" length="1"/>
+	</column>
+	<column name="Lisatietoja">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="LuontiPVM">
+		<type name="date" length="1"/>
+		<comment><![CDATA[Luonti päivämäärä]]></comment>
+	</column>
+	<column name="DatanLuoja">
+		<type name="varchar" length="50"/>
+		<comment><![CDATA[Datan luoja]]></comment>
+	</column>
+	<column name="MuokkausPVM">
+		<type name="smallint" length="1"/>
+		<comment><![CDATA[Muokkaus päivämäärä]]></comment>
+	</column>
+	<column name="DatanMuokkaaja">
+		<type name="varchar" length="50"/>
+		<comment><![CDATA[Datan muokkaaja]]></comment>
+	</column>
+	<column name="HistoriaPVM">
+		<type name="date" length="1"/>
+		<comment><![CDATA[Historian päivämäärä (???)]]></comment>
+	</column>
+	<column name="LisaKm2Kuvaus">
+		<type name="varchar" length="200"/>
+		<comment><![CDATA[Lisäkerrosneliömetrien kuvaus]]></comment>
+	</column>
+	<constraint name="yleinenalue_uuid_pk" type="pk-constr" table="asemakaavat.&quot;YleinenAlue_MuuAlue&quot;">
+		<columns names="YleinenAlue_uuid" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="AK_tunniste_AK_luokka" index="24"/>
+		<object name="AK_tunniste_AK_tyyppi" index="25"/>
+		<object name="Asemakaava__uuid_Asemakaava" index="23"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="AK_luokka_fk" index="4"/>
+		<object name="AK_tyyppi_fk" index="2"/>
+		<object name="Asemakaava_fk" index="1"/>
+		<object name="YleinenAlue_MuuAlue_uq" index="3"/>
+		<object name="YleinenAlue_MuuAlue_uq1" index="5"/>
+	</customidxs>
+</table>
+
+<table name="KortteliAlue">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+	<tag name="Alueet"/>
+	<position x="540" y="820"/>
+	<column name="gid">
+		<type name="serial" length="1"/>
+	</column>
+	<column name="geom">
+		<type name="geometry" length="1" spatial-type="MULTISURFACE" variation="1" srid="3878"/>
+	</column>
+	<column name="Korttelialue_uuid" not-null="true">
+		<type name="uuid" length="1"/>
+	</column>
+	<column name="Poistettava">
+		<type name="boolean" length="1"/>
+	</column>
+	<column name="Maanalainen">
+		<type name="boolean" length="1"/>
+	</column>
+	<column name="KohteenVaihe">
+		<type name="smallint" length="1"/>
+	</column>
+	<column name="Tehokkuusluku">
+		<type name="real" length="1"/>
+	</column>
+	<column name="Kaavamerkinta">
+		<type name="char" length="5"/>
+		<comment><![CDATA[Kaavamerkintä]]></comment>
+	</column>
+	<column name="Km2">
+		<type name="real" length="1"/>
+		<comment><![CDATA[Kerrosneliömetrit]]></comment>
+	</column>
+	<column name="LisaKm2">
+		<type name="real" length="1"/>
+		<comment><![CDATA[Lisäkerrosneliömetrit]]></comment>
+	</column>
+	<column name="LisaKm2Kuvaus">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="YhteensaKm2">
+		<type name="real" length="1"/>
+		<comment><![CDATA[Kerrosneliömetrit yhteensä]]></comment>
+	</column>
+	<column name="KaytettyKm2">
+		<type name="real" length="1"/>
+		<comment><![CDATA[Käytetyt kerrosneliömetrit]]></comment>
+	</column>
+	<column name="Kellari">
+		<type name="real" length="1"/>
+	</column>
+	<column name="Kerrosluku">
+		<type name="smallint" length="1"/>
+	</column>
+	<column name="Ullakko">
+		<type name="real" length="1"/>
+	</column>
+	<column name="Korttelinumero">
+		<type name="smallint" length="1"/>
+	</column>
+	<column name="KnumeroKartalle">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="PintaAla">
+		<type name="real" length="1"/>
+		<comment><![CDATA[Pinta-ala]]></comment>
+	</column>
+	<column name="Lisatietoja">
+		<type name="varchar" length="200"/>
+		<comment><![CDATA[Lisätietoja]]></comment>
+	</column>
+	<column name="LuontiPVM">
+		<type name="date" length="1"/>
+		<comment><![CDATA[Luonti päivämäärä]]></comment>
+	</column>
+	<column name="DatanLuoja">
+		<type name="varchar" length="50"/>
+		<comment><![CDATA[Datan luoja]]></comment>
+	</column>
+	<column name="MuokkausPVM">
+		<type name="date" length="1"/>
+		<comment><![CDATA[Muokkaus päivämäärä]]></comment>
+	</column>
+	<column name="DatanMuokkaaja">
+		<type name="varchar" length="50"/>
+		<comment><![CDATA[Datan muokkaaja]]></comment>
+	</column>
+	<column name="HistoriaPVM">
+		<type name="date" length="1"/>
+		<comment><![CDATA[Hisotoria päivämäärä (???)]]></comment>
+	</column>
+	<constraint name="korttelialue_uuid_pk" type="pk-constr" table="asemakaavat.&quot;KortteliAlue&quot;">
+		<columns names="Korttelialue_uuid" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="AK_tunniste_AK_luokka" index="26"/>
+		<object name="AK_tunniste_AK_tyyppi" index="27"/>
+		<object name="Asemakaava__uuid_Asemakaava" index="25"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="AK_luokka_fk" index="4"/>
+		<object name="AK_tyyppi_fk" index="2"/>
+		<object name="Asemakaava_fk" index="1"/>
+		<object name="KortteliAlue_uq" index="3"/>
+		<object name="KortteliAlue_uq1" index="5"/>
+	</customidxs>
+</table>
+
+<relationship name="KortteliAlue_has_many_Tontti" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#9ea118"
+	 src-table="asemakaavat.&quot;KortteliAlue&quot;"
+	 dst-table="asemakaavat.&quot;Tontti&quot;"
+	 src-required="true" dst-required="false"/>
+
+<relationship name="asemakaava_has_many_KaavaMaarays" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#bb033e"
+	 src-table="asemakaavat.&quot;Asemakaava&quot;"
+	 dst-table="asemakaavat.&quot;KaavaMaarays&quot;"
+	 src-required="true" dst-required="false">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<textbox name="Versio" italic="true" font-size="12">
+	<position x="40" y="60"/>
+	<comment><![CDATA[v1.0 2017-11-16]]></comment>
+</textbox>
+
+<relationship name="asemakaava_has_many_KortteliAlue" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#5666d7"
+	 src-table="asemakaavat.&quot;Asemakaava&quot;"
+	 dst-table="asemakaavat.&quot;KortteliAlue&quot;"
+	 src-required="true" dst-required="false">
+	<label ref-type="src-label">
+		<position x="-29.06" y="82.3"/>
+	</label>
+	<label ref-type="dst-label">
+		<position x="-0.230637" y="-8.7"/>
+	</label>
+</relationship>
+
+<relationship name="Asemakaava_has_many_YleinenAlue" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#74a3df"
+	 src-table="asemakaavat.&quot;Asemakaava&quot;"
+	 dst-table="asemakaavat.&quot;YleinenAlue_MuuAlue&quot;"
+	 src-required="true" dst-required="false">
+	<label ref-type="src-label">
+		<position x="-69.06" y="2.3"/>
+	</label>
+</relationship>
+
+<schema name="koodistot" rect-visible="true" fill-color="#e8b8ff">
+	<role name="postgres"/>
+	<comment><![CDATA[Erilaiset koodistot ja luokitukset]]></comment>
+</schema>
+
+<table name="AK_tyyppi">
+	<schema name="koodistot"/>
+	<role name="postgres"/>
+	<position x="180" y="1720"/>
+	<column name="AK_tunniste" not-null="true">
+		<type name="varchar" length="10"/>
+	</column>
+	<column name="AK_selite">
+		<type name="varchar" length="200"/>
+	</column>
+	<constraint name="AK_tyyppi_pk" type="pk-constr" table="koodistot.&quot;AK_tyyppi&quot;">
+		<columns names="AK_tunniste" ref-type="src-columns"/>
+	</constraint>
+	<initial-data>
+<![CDATA[AK_tunniste•AK_selite⸣
+A•Asuinrakennusten korttelialue.⸣
+AK•Asuinkerrostalojen korttelialue.⸣
+AS•Asuntolarakennusten korttelialue⸣
+AP•Asuinpientalojen korttelialue.⸣
+AR•Rivitalojen ja muiden kytkettyjen asuinrakennusten korttelialue.⸣
+AO•Erillispientalojen korttelialue.⸣
+AL•Asuin-, liike- ja toimistorakennusten korttelialue.⸣
+AH•Asumista palveleva yhteiskäyttöinen korttelialue.⸣
+AM•Maatilojen talouskeskusten korttelialue.⸣
+P•Palvelurakennusten korttelialue.⸣
+PL•Lähipalvelurakennusten korttelialue.⸣
+PV•Huvi- ja viihdepalvelujen korttelialue.⸣
+Y•Yleisten rakennusten korttelialue.⸣
+YL•Julkisten lähipalvelurakennusten korttelialue.⸣
+YH•Hallinto- ja virastorakennusten korttelialue.⸣
+YO•Opetustoimintaa palvelevien rakennusten korttelialue.⸣
+YS•Sosiaalitointa ja terveydenhuoltoa palvelevien rakennusten korttelialue.⸣
+YY•Kulttuuritoimintaa palvelevien rakennusten korttelialue.⸣
+YM•Museorakennusten korttelialue.⸣
+YK•Kirkkojen ja muiden seurakunnallistenrakennusten korttelialue.⸣
+YU•Urheilutoimintaa palvelevien rakennusten korttelialue.⸣
+C•Keskustatoimintojen korttelialue.⸣
+K•Liike- ja toimistorakennusten korttelialue.⸣
+KL•Liikerakennusten korttelialue.⸣
+KM•Liikerakennusten korttelialue, jolle saa sijoittaa vähittäiskaupan suuryksikön.⸣
+KT•Toimistorakennusten korttelialue.⸣
+KTY•Toimitilarakennusten korttelialue.⸣
+T•Teollisuus- ja varastorakennusten korttelialue.⸣
+TT•Teollisuusrakennusten korttelialue.⸣
+TV•Varastorakennusten korttelialue.⸣
+TY•Teollisuusrakennusten korttelialue, jolla ympäristö asettaa toiminnan laadulle erityisiä vaatimuksia.⸣
+T/kem•Teollisuus- ja varastorakennusten korttelialue, jolla on/jolle saa sijoittaa merkittävän, vaarallisia kemikaaleja valmistavan tai varastoivan laitoksen.⸣
+V•Virkistysalue.⸣
+VP•Puisto.⸣
+VL•Lähivirkistysalue.⸣
+VK•Leikkipuisto.⸣
+VU•Urheilu- ja virkistyspalvelujen alue.⸣
+VR•Retkeily- ja ulkoilualue.⸣
+VV•Uimaranta-alue.⸣
+R•Loma- ja matkailualue.⸣
+RA•Loma-asuntojen korttelialue.⸣
+RM•Matkailua palvelevien rakennusten korttelialue.⸣
+RL•Leirintäalue.⸣
+RV•Asuntovaunualue.⸣
+RP•Siirtolapuutarha-/palstaviljelyalue.⸣
+L•Liikennealue.⸣
+LT•Yleisen tien alue.⸣
+LR•Rautatiealue.⸣
+LL•Lentokenttäalue.⸣
+LS•Satama-alue.⸣
+LK•Kanava-alue.⸣
+LV•Venesatama/venevalkama.⸣
+LP•Yleinen pysäköintialue.⸣
+LH•Huoltoaseman korttelialue.⸣
+LHA•Henkilöliikenneterminaalin korttelialue.⸣
+LTA•Tavaraliikenneterminaalin korttelialue.⸣
+LPY•Yleisten pysäköintilaitosten korttelialue.⸣
+LPA•Autopaikkojen korttelialue.⸣
+E•Erityisalue.⸣
+ET•Yhdyskuntateknistä huoltoa palvelevien rakennusten ja laitosten alue.⸣
+EN•Energiahuollon alue.⸣
+EJ•Jätteenkäsittelyalue.⸣
+EO•Maa-ainesten ottoalue.⸣
+EK•Kaivosalue.⸣
+EMT•Mastoalue.⸣
+EA•Ampumarata-alue.⸣
+EP•Puolustusvoimien alue.⸣
+EH•Hautausmaa-alue.⸣
+EV•Suojaviheralue.⸣
+S•Suojelualue.⸣
+SL•Luonnonsuojelualue.⸣
+SM•Muinaismuistoalue.⸣
+SR•Rakennussuojelualue.⸣
+M•Maa- ja metsätalousalue.⸣
+MT•Maatalousalue.⸣
+ME•Kotieläintalouden suuryksikön alue.⸣
+MP•Puutarha- ja kasvihuonealue.⸣
+MA•Maisemallisesti arvokas peltoalue.⸣
+MU•Maa- ja metsätalousalue, jolla on erityistä ulkoilun ohjaamistarvetta.⸣
+MY•Maa- ja metsätalousalue, jolla on erityisiä ympäristöarvoja.⸣
+W•Vesialue.]]>
+	</initial-data>
+</table>
+
+<table name="Rakennusala">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+	<position x="1940" y="660"/>
+	<column name="gid">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="geom">
+		<type name="geometry" length="0" spatial-type="MULTISURFACE" variation="1" srid="3878"/>
+	</column>
+	<column name="Rakennusala_uuid" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="Tyyppi">
+		<type name="varchar" length="0"/>
+	</column>
+	<column name="KohteenVaihe">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="Tehokkuusluku">
+		<type name="real" length="0"/>
+	</column>
+	<column name="Km2">
+		<type name="real" length="0"/>
+	</column>
+	<column name="LisaKm2">
+		<type name="real" length="0"/>
+	</column>
+	<column name="LisaKm2Kuvaus">
+		<type name="varchar" length="200"/>
+	</column>
+	<column name="KaytettyKm2">
+		<type name="real" length="0"/>
+	</column>
+	<column name="Poistettava">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="Maanalainen">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="Lisatietoja">
+		<type name="varchar" length="200"/>
+	</column>
+	<column name="Varisavy">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="Sitova" default-value="True">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="Kellari">
+		<type name="real" length="0"/>
+	</column>
+	<column name="Kerrosluku">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="Ullakko">
+		<type name="real" length="0"/>
+	</column>
+	<column name="PintaAla">
+		<type name="real" length="0"/>
+	</column>
+	<column name="LuontiPVM">
+		<type name="date" length="0"/>
+	</column>
+	<column name="DatanLuoja">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="MuokkausPVM">
+		<type name="date" length="0"/>
+	</column>
+	<column name="DatanMuokkaaja">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="HistoriaPVM">
+		<type name="date" length="0"/>
+	</column>
+	<column name="DatanOmistaja">
+		<type name="varchar" length="50"/>
+	</column>
+	<constraint name="rakennusala_uuid_pk" type="pk-constr" table="asemakaavat.&quot;Rakennusala&quot;">
+		<columns names="Rakennusala_uuid" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="Asemakaava__uuid_Asemakaava" index="25"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="Asemakaava_fk" index="1"/>
+	</customidxs>
+</table>
+
+<relationship name="Asemakaava_has_many_Rakennusala" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#65898c"
+	 src-table="asemakaavat.&quot;Asemakaava&quot;"
+	 dst-table="asemakaavat.&quot;Rakennusala&quot;"
+	 src-required="false" dst-required="false"/>
+
+<table name="YmparistoAlue">
+	<schema name="asemakaavat"/>
+	<role name="postgres"/>
+	<position x="2080" y="1260"/>
+	<column name="gid">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="geom">
+		<type name="geometry" length="0" spatial-type="MULTISURFACE" variation="1" srid="3878"/>
+	</column>
+	<column name="YmparistoAlue_uuid" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="Tyyppi">
+		<type name="varchar" length="0"/>
+	</column>
+	<column name="KohteenVaihe">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="Poistettava">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="Lisatietoja">
+		<type name="varchar" length="200"/>
+	</column>
+	<column name="Sitova">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="PintaAla">
+		<type name="real" length="0"/>
+	</column>
+	<column name="LuontiPVM">
+		<type name="date" length="0"/>
+	</column>
+	<column name="DatanLuoja">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="MuokkausPVM">
+		<type name="date" length="0"/>
+	</column>
+	<column name="DatanMuokkaaja">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="HistoriaPVM">
+		<type name="date" length="0"/>
+	</column>
+	<column name="DatanOmistaja">
+		<type name="varchar" length="50"/>
+	</column>
+	<constraint name="ymparistoalue_uuid_pk" type="pk-constr" table="asemakaavat.&quot;YmparistoAlue&quot;">
+		<columns names="YmparistoAlue_uuid" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="Asemakaava__uuid_Asemakaava" index="15"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="Asemakaava_fk" index="1"/>
+	</customidxs>
+</table>
+
+<relationship name="Asemakaava_has_many_YmparistoAlue" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#7a9462"
+	 src-table="asemakaavat.&quot;Asemakaava&quot;"
+	 dst-table="asemakaavat.&quot;YmparistoAlue&quot;"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="Rakennusala_has_many_KaavaMaarays" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#fd891e"
+	 src-table="asemakaavat.&quot;Rakennusala&quot;"
+	 dst-table="asemakaavat.&quot;KaavaMaarays&quot;"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="YmparistoAlue_has_many_KaavaMaarays" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#298377"
+	 src-table="asemakaavat.&quot;YmparistoAlue&quot;"
+	 dst-table="asemakaavat.&quot;KaavaMaarays&quot;"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="YleinenAlue_has_one_AK_merkinnat" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#a85fa3"
+	 src-table="koodistot.&quot;AK_tyyppi&quot;"
+	 dst-table="asemakaavat.&quot;YleinenAlue_MuuAlue&quot;"
+	 src-required="false" dst-required="false"/>
+
+<table name="ra_tyyppi">
+	<schema name="koodistot"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Rakennusalan tyyppi]]></comment>
+	<position x="1560" y="1720"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="ra_tyyppi_uuid">
+		<type name="uuid" length="0"/>
+		<comment><![CDATA[Rakennusalan tyypin yksilöivä tunnus]]></comment>
+	</column>
+	<column name="nimi">
+		<type name="varchar" length="254"/>
+		<comment><![CDATA[Rakennusalan tyypin nimi]]></comment>
+	</column>
+	<column name="lyhenne">
+		<type name="varchar" length="5"/>
+		<comment><![CDATA[Rakennusalan tyypin lyhenne]]></comment>
+	</column>
+	<constraint name="id_pk" type="pk-constr" table="koodistot.ra_tyyppi">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<initial-data>
+<![CDATA[id•nimi•lyhenne⸣
+•Rakennusala•⸣
+•Rakennusala_I_•⸣
+•Rakennusala, jolle saa sijoittaa päiväkodin•pk⸣
+•Rakennusala, jolle saa sijoittaa myymälän•m⸣
+•Rakennusala, jolle saa sijoittaa maatilan talouskeskuksen•⸣
+•Rakennusala, jolle saa sijoittaa talousrakennuksen•t⸣
+•Rakennusalal, jolla saa sijoittaa polttoaineen jakeluaseman•⸣
+•Auton säilytyspaikan rakennusala•a⸣
+•Uloke•u⸣
+•Rakennukseen jätettävä kulkuaukko•⸣
+•Valokatteinen tila•v⸣
+•Leikki/oleskelualueeksi varattu alue•le⸣
+•Pysäköimispaikka•lp⸣
+•Suojeltu rakennus•sr⸣
+•Maanalainen tila•ma]]>
+	</initial-data>
+</table>
+
+<relationship name="ra_tyyppi_has_one_Rakennusala" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#2a3e2e"
+	 src-table="asemakaavat.&quot;Rakennusala&quot;"
+	 dst-table="koodistot.ra_tyyppi"
+	 src-required="false" dst-required="false">
+	<label ref-type="src-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<table name="AK_luokka">
+	<schema name="koodistot"/>
+	<role name="postgres"/>
+	<position x="1200" y="1700"/>
+	<column name="AK_tunniste" not-null="true">
+		<type name="varchar" length="10"/>
+	</column>
+	<column name="AK_selite">
+		<type name="varchar" length="0"/>
+	</column>
+	<constraint name="AK_luokka_pk" type="pk-constr" table="koodistot.&quot;AK_luokka&quot;">
+		<columns names="AK_tunniste" ref-type="src-columns"/>
+	</constraint>
+	<initial-data>
+<![CDATA[AK_tunniste•AK_selite⸣
+A•Asuinrakennusten korttelialue⸣
+P•Palvelurakennusten korttelialue⸣
+Y•Yleisten rakennusten korttelialue⸣
+C•Keskustatoimintojen korttelialue⸣
+K•Liike-ja toimistorakennusten korttelialue⸣
+T•Teollisuus- ja varastorakennusten korttelialue⸣
+V•Virkistysalue⸣
+R•Loma- ja matkailualue⸣
+L•Liikennealue⸣
+E•Erityisalue⸣
+S•Suojelualue⸣
+M•Maa- ja metsätalousalue⸣
+W•Vesialue]]>
+	</initial-data>
+</table>
+
+<relationship name="KortteliAlue_has_one_AK_tyyppi" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#d58923"
+	 src-table="koodistot.&quot;AK_tyyppi&quot;"
+	 dst-table="asemakaavat.&quot;KortteliAlue&quot;"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="YleinenAlue_has_one_AK_luokka" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#414350"
+	 src-table="koodistot.&quot;AK_luokka&quot;"
+	 dst-table="asemakaavat.&quot;YleinenAlue_MuuAlue&quot;"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="KortteliAlue_has_one_AK_luokka" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#fc200f"
+	 src-table="koodistot.&quot;AK_luokka&quot;"
+	 dst-table="asemakaavat.&quot;KortteliAlue&quot;"
+	 src-required="false" dst-required="false"/>
+
+</dbmodel>
